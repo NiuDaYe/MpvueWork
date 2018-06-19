@@ -156,7 +156,7 @@ export default{
     .expectData{
         display: inline-block;
         width: 100%;
-        font-size: 26rpx;
+        font-size: 28rpx;
         padding-top: 20rpx;
         padding-bottom: 20rpx;
         border-bottom: 8rpx solid #ccc;
@@ -178,7 +178,7 @@ export default{
         .distributionCenter{
             text-indent: 2em;
             border-bottom: 1px solid #e4e4e4;
-            font-size: 24rpx;
+            font-size: 26rpx;
             line-height: 58rpx;
         }
         .details{
