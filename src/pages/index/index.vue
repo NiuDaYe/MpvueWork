@@ -28,7 +28,7 @@
                         <i-grid-label>要货</i-grid-label>
                     </i-grid-item>
                 </a>
-                <a href="/pages/counter/main">
+                <a href="/pages/orders/main">
                     <i-grid-item>
                         <i-grid-icon>
                             <i-icon size="30" type="createtask_fill" />

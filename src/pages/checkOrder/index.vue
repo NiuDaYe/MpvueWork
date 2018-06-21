@@ -20,7 +20,7 @@
         </div>
 
         <scroll-view scroll-y class="cell-list-border" @scrolltolower="lower" :style="'height:'+contentHeight">
-
+            
             <div class="detailsList">
                 <p class="distributionCenter">北京配送中心</p>
                 <div class="details">

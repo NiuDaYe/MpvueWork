@@ -8,10 +8,13 @@ app.$mount()
 export default {
     config: {
         usingComponents: {
-            // "i-tabs": "../../../static/examples/tabs/index",
-            // "i-tab": "../../../static/examples/tab/index",
-            // "i-tab-bar": "../../../static/examples/tab-bar/index",
-            // "i-tab-bar-item": "../../../static/examples/tab-bar-item/index"
+            "i-tabs": "../../../static/examples/tabs/index",
+            "i-tab": "../../../static/examples/tab/index",
+            "i-cell-group": "../../../static/examples/cell-group/index",
+            "i-cell": "../../../static/examples/cell/index",
+            "i-tag": "../../../static/examples/tag/index",
+            "i-icon": "../../../static/examples/icon/index"
+
         }
     }
 }
