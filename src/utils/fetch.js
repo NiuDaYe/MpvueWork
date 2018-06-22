@@ -2,8 +2,12 @@ var Fly=require("flyio/dist/npm/wx")
 var fly=new Fly
 
 //配置请求基地址
-// fly.config.baseURL = "http://ecsc.meishijia.com/ecsc-mobile-rpc";
-fly.config.baseURL = "http://cnodejs.org/api/v1/"
+fly.config.baseURL = "https://ecsc.meishijia.com/ecsc-mobile-rpc";
+// fly.config.baseURL = "https://ecsc.e7e6.net/ecsc-extension-rpc"; //正式环境
+
+// fly.config.baseURL = "http://cnodejs.org/api/v1/"
+
+fly.config.timeout=5000;
 
 // //添加请求拦截器
 fly.interceptors.request.use((config, promise) => {

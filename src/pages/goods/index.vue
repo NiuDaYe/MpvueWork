@@ -2,6 +2,15 @@
 <template>
     <div class="googs">
         <div class="search">
+            <view class="selectDcid">
+              <picker @change="bindPickerChange" :value="index" range-key="dcName" :range="dcList">
+                <view class="picker">
+                  {{dcList[index].dcName}}
+                </view>
+              </picker>
+            </view>
+
+
             <input type="text" placeholder="请输入物品名称" :value="searchName">
             <i-icon size="22" type="search" class="icon-search" />
         </div>
@@ -9,8 +18,8 @@
         <div class="menu">
             <i-col span="6" class="col-class" >
                 <scroll-view scroll-y class="left-con" :style="'height:'+contentLeftHeight" >
-                    <div class="telmp" v-for="(item,index) in list">
-                        <p>{{item.message}}</p>
+                    <div class="telmp" v-for="item in category">
+                        <p @click="findDcMaterialInfo(item.categoryId)">{{item.categoryName}}</p>
                     </div>
                 </scroll-view>
             </i-col>
@@ -380,57 +389,27 @@
 
 <script>
 import wxp from 'minapp-api-promise'
+import fetch from '@/utils/fetch'
 
 export default{
     data(){
         return{
+            dcList: [
+                {
+                    dcId: 1000,
+                    dcName: '美国'
+                },
+            ],              // 配送中心list
+            indexs: 0,        // dcId
+            index:0,          // dcId 索引
             showFalse:false,
             searchName:'',
-            value:"1",
+            value:"1",      // categoryId
             jiage:'20',
             winHeight:null,
-            height: 52,
-            list:[
-                { message: '坚果' },
-                { message: '蔬菜' },
-                { message: '粮油' },
-                { message: '大米' },
-                { message: '土豆' },
-                { message: '玉米' },
-                { message: '宝马' },
-                { message: '奔驰' },
-                { message: '宝来' },
-                { message: '玛莎拉蒂' },
-                { message: '坚果' },
-                { message: '蔬菜' },
-                { message: '粮油' },
-                { message: '大米' },
-                { message: '土豆' },
-                { message: '玉米' },
-                { message: '宝马' },
-                { message: '奔驰' },
-                { message: '宝来' },
-                { message: '玛莎拉蒂' },
-                { message: '坚果' },
-                { message: '蔬菜' },
-                { message: '粮油' },
-                { message: '大米' },
-                { message: '土豆' },
-                { message: '玉米' },
-                { message: '宝马' },
-                { message: '奔驰' },
-                { message: '宝来' },
-                { message: '玛莎拉蒂' },
-                { message: '坚果' },
-                { message: '蔬菜' },
-                { message: '粮油' },
-                { message: '大米' },
-                { message: '土豆' },
-                { message: '玉米' },
-                { message: '宝马' },
-                { message: '奔驰' },
-                { message: '宝来' },
-                { message: '玛莎拉蒂' },
+            category:[       // 物品类别列表
+                { categoryName: '坚果' },
+                { categoryName: '蔬菜' },
             ]
         }
     },
@@ -443,24 +422,156 @@ export default{
         },
         lower(){
             console.log('到底了');
+        },
+        // 保存选中的配送中心
+        bindPickerChange(e) {
+
+            let index = e.mp.detail.value
+            let currentId = this.dcList[index].dcId; // 这个id就是选中项的id
+            this.indexs = currentId;
+            this.index = index;
+        },
+        //获取配送中心
+        getDistributionCenter(){
+            let info = wx.getStorageSync('userInfo');
+            if(info.dcList.length == 0){
+                // 后期加上没有配送中心的情况
+                this.dcList[0].dcName = '无配送中心'
+            }else{
+                this.dcList = info.dcList;
+            }
+
+        },
+        //获取物品类别 then 获取第一个分类下的可选物品
+        findCategorys(){
+            let info = wx.getStorageSync('userInfo');
+            let _this = this;
+            let data = {
+                "tenancy_id":info.tenancyId,
+            	"store_id":info.storeId,
+            	"data":[],
+                "pagination":null
+            };
+            data = JSON.stringify(data);
+
+            fetch.post('/material/findCategory',data)
+            .then(function (res) {
+                _this.category = res.data
+            })
+            .then(function(){
+                _this.findDcMaterialInfo(); //获取第一个分类下的可选物品
+            })
+            .catch(function (error) {
+                wx.showLoading({
+                  title: error,
+                })
+                setTimeout(function(){
+                    wx.hideLoading()
+                },1000)
+            });
+        },
+        // 查找可用物品
+        findDcMaterialInfo(categoryId){
+            let info = wx.getStorageSync('userInfo');
+            let _this = this;
+            let data = {};
+            if(categoryId == undefined){
+                categoryId = _this.category[0].categoryId;
+                this.indexs = info.dcList[0].dcId
+            }
+
+            data = {
+                "tenancy_id": info.tenancyId,              
+                "store_id": info.storeId,
+                "userId": info.userId,
+                "userCode": info.userCode,
+                "categoryId":categoryId ,
+                "userName": info.userName,
+                "data": [{
+                        "code": "",
+                        "dcId": _this.indexs
+                     }],
+                "pagination": null
+            }
+
+            data = JSON.stringify(data);
+
+            wx.showLoading({
+              title: '加载中...',
+            })
+
+            fetch.post('/material/findDcMaterialInfo', data)
+            .then(function (res) {
+                 console.log('res111111',res);
+
+                if(res.errcode == 0){
+
+
+                    wx.showLoading({
+                      title: '加载完毕！',
+                    })
+                    setTimeout(function(){
+                        wx.hideLoading()
+                    },1000)
+
+
+                }else{
+                    wx.hideLoading()
+                    wx.showModal({
+                      title: '加载失败',
+                      content: res.errmsg,
+                      success: function(res) {
+                        if (res.confirm) {
+                          //console.log('用户点击确定')
+                        }
+                      }
+                    })
+                }
+            })
+            .catch(function (error) {
+                wx.showLoading({
+                  title: '加载失败!',
+                })
+                setTimeout(function(){
+                  wx.hideLoading()
+                },2000)
+            });
+
+
         }
+
+    },
+    watch:{
+        dcList:{
+           handler(val, oldVal){},
+           deep:true
+       },
+    },
+    onLoad(){
+
+
     },
     async onLoad() {
         let info = await wxp.getSystemInfo();
+        let _this = this;
         this.winHeight = info.windowHeight;
         await wxp.setNavigationBarTitle({
           title: '要货'
         })
+
+        this.getDistributionCenter();
+        this.findCategorys();
+
     },
     computed: {
         contentLeftHeight() {
             if (this.winHeight) {
-                return this.winHeight - 40 - this.height + 'px'
+                return this.winHeight - 110 + 'px'
             }
         },
         contentRightHeight(){
             if (this.winHeight) {
-                return this.winHeight - 58 - this.height + 'px'
+                return this.winHeight - 130  + 'px'
             }
         }
     },
@@ -476,12 +587,24 @@ export default{
 }
 .googs{
     color:#495060;
+    .selectDcid{
+        font-size: 26rpx;
+        position: absolute;
+        left: -160rpx;
+        color: #333333;
+        width: 140rpx;
+        height: 52rpx;
+        // border:1px solid red;
+        text-align: center;
+        line-height: 52rpx;
+        overflow: hidden;
+    }
     .search{
-        width: 90%;
-        margin:0 auto;
+        width: 70%;
         height: 60rpx;
         color: #ccc;
         position: relative;
+        margin-left: 24%;
         input{
             border:1px solid #ccc;
             border-top-left-radius: 30rpx;

@@ -8,8 +8,7 @@ app.$mount()
 export default {
     config: {
         usingComponents: {
-            "i-button": "../../../static/examples/button/index",
-            "i-input": "../../../static/examples/input/index"
+             // "i-input": "../../../static/examples/input/index"
         }
     }
 }

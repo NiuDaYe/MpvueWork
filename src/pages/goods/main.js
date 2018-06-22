@@ -13,7 +13,6 @@ export default {
             "i-icon": "../../../static/examples/icon/index",
             "i-row": "../../../static/examples/row/index",
             "i-col": "../../../static/examples/col/index",
-            "i-input-number": "../../../static/examples/input-number/index",
         }
     }
 }

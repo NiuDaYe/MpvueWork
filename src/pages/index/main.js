@@ -10,7 +10,6 @@ export default {
         usingComponents: {
             "i-button": "../../../static/examples/button/index",
             "i-col": "../../../static/examples/col/index",
-            "i-avatar": "../../../static/examples/avatar/index",
             "i-grid": "../../../static/examples/grid/index",
             "i-grid-item": "../../../static/examples/grid-item/index",
             "i-grid-icon": "../../../static/examples/grid-icon/index",
