@@ -17,19 +17,20 @@
         <div class="menu">
             <i-col span="6" class="col-class" >
                 <scroll-view scroll-y class="left-con" :style="'height:'+contentLeftHeight" >
-                    <div class="telmp" v-for="(item,index) in category" wx:key="key" :class="{'checkActive':index == selectIndex}">
-                        <p @click="clickFindDcMaterialInfo(item,index)">{{item.categoryName}}</p>
+                    <div class="telmp" v-for="(item,index) in category" :class="{'checkActive':index == selectIndex}">
+                        <!-- {{item.categoryId}} -->
+                        <p @click="findDcMaterialInfo(item,index)">{{item.categoryName}}</p>
                     </div>
                 </scroll-view>
             </i-col>
 
             <i-col span="18" class="col-class">
                 <div class="show-tittle">
-                    {{categoryName}}
+                    蔬菜类
                 </div>
                 <scroll-view scroll-y class="cell-list-border" @scrolltolower="lower" :style="'height:'+contentRightHeight">
                     <div :style="'min-height:'+contentRightHeights">
-                        <div class="cell-list" v-for="item in list" wx:key="key">
+                        <div class="cell-list" v-for="item in list">
                             <div class="cell-left">
                                 <p class="name">{{item.materialName}}</p>
                                 <p class="unit"> <span>￥{{item.shippingPrice}}</span>/{{item.unitName}} </p>
@@ -42,14 +43,56 @@
             </i-col>
         </div>
 
-        <shopbottom :list="list"> </shopbottom>
+        <div class="join-car">
+
+            <div class="price" @tap="showHideCar">
+                <i-badge :count="totalCount">
+                    <template v-if="totalCount > 0">
+                        <i-icon size="38" type="publishgoods_fill" color="#1e84ec"/>
+                    </template>
+                    <template v-else>
+                        <i-icon size="38" type="publishgoods_fill" />
+                    </template>
+                </i-badge>
+                <template v-if="totalPrice != null">
+                    {{totalPrice}} 元
+                </template>
+            </div>
+            <template v-if="totalCount > 0">
+                <p class="settlement settlementActive" @click="toPAY">去结算</p>
+            </template>
+            <template v-else>
+                <p class="settlement">请选购</p>
+            </template>
+        </div>
 
         <div class="maskLayer" v-if="showFalse" @click="hideCar"></div>
         <div class="join-car-list" v-show="showFalse">
             <scroll-view scroll-y class="cell-list-border">
-                <div class="">
-                    <h1>购物车</h1>
-                    <p class="dele-all">清空购物车</p>
+                <p class="dele-all">清空购物车</p>
+                <div class="cell-list">
+                    <div class="cell-left">
+                        <p class="name">黄豆</p>
+                        <p class="unit"> <span>￥534.11</span>/袋 </p>
+                    </div>
+
+                    <div class="cell-right">
+                        <span> - </span>
+                        <input type="text" class="write-number" :value="value" placeholder="数量" >
+                        <span> + </span>
+                    </div>
+                </div>
+                <div class="cell-list">
+                    <div class="cell-left">
+                        <p class="name">黄豆</p>
+                        <p class="unit"> <span>￥534.11</span>/袋 </p>
+                    </div>
+
+                    <div class="cell-right">
+                        <span> - </span>
+                        <input type="text" class="write-number" :value="value" placeholder="数量" >
+                        <span> + </span>
+                    </div>
                 </div>
                 <div class="cell-list">
                     <div class="cell-left">
@@ -75,7 +118,90 @@
                         <span> + </span>
                     </div>
                 </div>
+                <div class="cell-list">
+                    <div class="cell-left">
+                        <p class="name">黄豆</p>
+                        <p class="unit"> <span>￥534.11</span>/袋 </p>
+                    </div>
 
+                    <div class="cell-right">
+                        <span> - </span>
+                        <input type="text" class="write-number" :value="value" placeholder="数量" >
+                        <span> + </span>
+                    </div>
+                </div>
+                <div class="cell-list">
+                    <div class="cell-left">
+                        <p class="name">黄豆</p>
+                        <p class="unit"> <span>￥534.11</span>/袋 </p>
+                    </div>
+
+                    <div class="cell-right">
+                        <span> - </span>
+                        <input type="text" class="write-number" :value="value" placeholder="数量" >
+                        <span> + </span>
+                    </div>
+                </div>
+                <div class="cell-list">
+                    <div class="cell-left">
+                        <p class="name">黄豆</p>
+                        <p class="unit"> <span>￥534.11</span>/袋 </p>
+                    </div>
+
+                    <div class="cell-right">
+                        <span> - </span>
+                        <input type="text" class="write-number" :value="value" placeholder="数量" >
+                        <span> + </span>
+                    </div>
+                </div>
+                <div class="cell-list">
+                    <div class="cell-left">
+                        <p class="name">黄豆</p>
+                        <p class="unit"> <span>￥534.11</span>/袋 </p>
+                    </div>
+
+                    <div class="cell-right">
+                        <span> - </span>
+                        <input type="text" class="write-number" :value="value" placeholder="数量" >
+                        <span> + </span>
+                    </div>
+                </div>
+                <div class="cell-list">
+                    <div class="cell-left">
+                        <p class="name">黄豆</p>
+                        <p class="unit"> <span>￥534.11</span>/袋 </p>
+                    </div>
+
+                    <div class="cell-right">
+                        <span> - </span>
+                        <input type="text" class="write-number" :value="value" placeholder="数量" >
+                        <span> + </span>
+                    </div>
+                </div>
+                <div class="cell-list">
+                    <div class="cell-left">
+                        <p class="name">黄豆</p>
+                        <p class="unit"> <span>￥534.11</span>/袋 </p>
+                    </div>
+
+                    <div class="cell-right">
+                        <span> - </span>
+                        <input type="text" class="write-number" :value="value" placeholder="数量" >
+                        <span> + </span>
+                    </div>
+                </div>
+                <div class="cell-list">
+                    <div class="cell-left">
+                        <p class="name">黄豆</p>
+                        <p class="unit"> <span>￥534.11</span>/袋 </p>
+                    </div>
+
+                    <div class="cell-right">
+                        <span> - </span>
+                        <input type="text" class="write-number" :value="value" placeholder="数量" >
+                        <span> + </span>
+                    </div>
+                </div>
             </scroll-view>
         </div>
 
@@ -86,7 +212,7 @@
 import wxp from 'minapp-api-promise'
 import fetch from '@/utils/fetch'
 import cartcontrols from '@/components/cartcontrol/index'
-import shopbottom from '@/components/shopbottom/index'
+import Vue from 'vue'
 
 export default{
     data(){
@@ -97,20 +223,19 @@ export default{
                     dcName: '美国'
                 },
             ],                  // 配送中心list
-            indexs: 0,                  // dcId
-            selectIndex:0,              // 点击索引
-            index:0,                    // dcId 索引
-            categoryName:'当前选项',     // 显示当前点击的分类选项
+            indexs: 0,          // dcId
+            selectIndex:0,   // 点击索引
+            index:0,            // dcId 索引
             showFalse:false,
             searchName:'',
-            value:"1",                  // categoryId
+            value:"1",          // categoryId
             jiage:'20',
-            winHeight:null,             // window height
-            category:[                  // 物品类别列表
+            winHeight:null,
+            category:[          // 物品类别列表
                 { categoryName: '坚果' },
                 { categoryName: '蔬菜' },
             ],
-            list:[                      // 右侧物品列表
+            list:[
                 {
                   "dcId": 34,
                   "dcCode": "0901",
@@ -131,27 +256,9 @@ export default{
                   "clearingType": "naturial_month",
                   "clearingTypeName": "自然月结算",
                 },
-                {
-                  "dcId": 34,
-                  "dcCode": "0901",
-                  "dcName": "测试配送中心01",
-                  "materialId": 19462,
-                  "materialCode": "2300006",
-                  "materialName": "门店库存测试3",
-                  "stockUnitId": 4,
-                  "stockUnitCode": "4001",
-                  "stockUnitName": "斤",
-                  "unitId": 4,
-                  "unitCode": "4001",
-                  "unitName": "斤",
-                  "conversionValue": 1,
-                  "deliveryMode": "unified",
-                  "shippingPrice": 6,
-                  "isBomgroup": "0",
-                  "clearingType": "naturial_month",
-                  "clearingTypeName": "自然月结算",
-                },
-            ],
+
+            ],             // 右侧物品列表
+
         }
     },
     methods:{
@@ -167,6 +274,7 @@ export default{
         // 保存选中的配送中心
         bindPickerChange(e) {
             let index = e.mp.detail.value
+            console.log('index',index);
             let currentId = this.dcList[index].dcId; // 这个id就是选中项的id
             this.indexs = currentId;
             this.index = index;
@@ -199,29 +307,30 @@ export default{
                 _this.category = res.data
             })
             .then(function(){
-                let item = _this.category[0];
-                _this.firstFindDcMaterialInfo(item,0); //获取第一个分类下的可选物品
+                //_this.findDcMaterialInfo(); //获取第一个分类下的可选物品
             })
             .catch(function (error) {
                 wx.showLoading({
-                    title: "分类获取失败！",
+                  title: error,
                 })
                 setTimeout(function(){
                     wx.hideLoading()
                 },1000)
             });
         },
-        // 第一次查找物品
-        firstFindDcMaterialInfo(item,index){
+        // 查找可用物品
+        findDcMaterialInfo(item,index){
             let info = wx.getStorageSync('userInfo');
             let _this = this;
             let data = {};
             let categoryId = item.categoryId;
             this.selectIndex = index;
 
-            categoryId = _this.category[0].categoryId;
-            this.indexs = info.dcList[0].dcId;
-            this.categoryName = _this.category[0].categoryName;
+            if(categoryId == undefined){
+                categoryId = _this.category[0].categoryId;
+                this.indexs = info.dcList[0].dcId;
+            }
+
             data = {
                 "tenancy_id": info.tenancyId,              
                 "store_id": info.storeId,
@@ -235,48 +344,28 @@ export default{
                      }],
                 "pagination": null
             }
+
             data = JSON.stringify(data);
-            this.pubFindDcMaterialInfo(data);
-        },
-        // 点击查找可用物品
-        clickFindDcMaterialInfo(item,index){
-            let info = wx.getStorageSync('userInfo');
-            let _this = this;
-            let data = {};
-            let categoryId = item.categoryId;
-            this.categoryName = item.categoryName;
-            this.selectIndex = index;
-            data = {
-                "tenancy_id": info.tenancyId,              
-                "store_id": info.storeId,
-                "userId": info.userId,
-                "userCode": info.userCode,
-                "userName": info.userName,
-                "data": [{
-                        "code": "",
-                        "categoryId":categoryId,
-                        "dcId": _this.indexs
-                     }],
-                "pagination": null
-            }
-            data = JSON.stringify(data);
-            this.pubFindDcMaterialInfo(data);
-        },
-        pubFindDcMaterialInfo(data){
-            let _this = this;
+
             wx.showLoading({
               title: '加载中...',
             })
+
             fetch.post('/material/findDcMaterialInfo', data)
             .then(function (res) {
+                 // console.log('res111111',res);
+
                 if(res.errcode == 0){
+
                     _this.list = res.data;        //暂时关闭
+
                     wx.showLoading({
                       title: '加载完毕！',
                     })
                     setTimeout(function(){
                         wx.hideLoading()
                     },1000)
+
                 }else{
                     wx.hideLoading()
                     wx.showModal({
@@ -298,8 +387,9 @@ export default{
                   wx.hideLoading()
                 },2000)
             });
-        },
 
+
+        }
     },
     watch:{
         dcList:{
@@ -337,11 +427,34 @@ export default{
                 return this.winHeight - 130 + 'px'
             }
         },
+        // 总价
+        totalPrice(){
+            let total = 0;
+            this.list.map((food)=>{
+                if(!food.count){
+                    Vue.set(this.list,'count',0)
+                }else{
+                    total += food.shippingPrice * food.count;
+                }
+            })
+            return total;
+        },
+        // 数量总和
+        totalCount(){
+            let count = 0;
+            this.list.map((food)=>{
+                if(!food.count){
+                    Vue.set(this.list,'count',0)
+                }else{
+                    count += food.count;
+                }
+            })
+            return count;
+        },
 
     },
     components:{
-        cartcontrols,
-        shopbottom
+        cartcontrols
     }
 }
 </script>
@@ -444,7 +557,33 @@ export default{
             }
         }
     }
-
+    .join-car{
+        width: 100%;
+        height: 120rpx;
+        background: #f8f8f9;
+        position: fixed;
+        bottom: 0;
+        z-index: 3;
+        display: flex;
+        justify-content:space-between;
+        .price{
+            height: 120rpx;
+            line-height: 120rpx;
+            width: 69%;
+        }
+        .settlement{
+            height: 120rpx;
+            width: 30%;
+            line-height: 120rpx;
+            padding-right: 16rpx;
+            border-left: 1px solid #dddee1;
+            text-align: center;
+        }
+        .settlementActive{
+            background: #1e84ec;
+            color: #fff;
+        }
+    }
     .join-car-list{
         .cell-list-border{
             .dele-all{
