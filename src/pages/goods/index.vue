@@ -18,7 +18,7 @@
             <i-col span="6" class="col-class" >
                 <scroll-view scroll-y class="left-con" :style="'height:'+contentLeftHeight" >
                     <div class="telmp" v-for="(item,index) in category" wx:key="key" :class="{'checkActive':index == selectIndex}">
-                        <p @click="clickFindDcMaterialInfo(item,index)">{{item.categoryName}}</p>
+                         <p @click="clickFindDcMaterialInfo(item,index)">{{item.categoryName}}</p>
                     </div>
                 </scroll-view>
             </i-col>
@@ -41,43 +41,7 @@
                 </scroll-view>
             </i-col>
         </div>
-
-        <shopbottom :list="list"> </shopbottom>
-
-        <div class="maskLayer" v-if="showFalse" @click="hideCar"></div>
-        <div class="join-car-list" v-show="showFalse">
-            <scroll-view scroll-y class="cell-list-border">
-                <div class="">
-                    <h1>购物车</h1>
-                    <p class="dele-all">清空购物车</p>
-                </div>
-                <div class="cell-list">
-                    <div class="cell-left">
-                        <p class="name">黄豆</p>
-                        <p class="unit"> <span>￥534.11</span>/袋 </p>
-                    </div>
-
-                    <div class="cell-right">
-                        <span> - </span>
-                        <input type="text" class="write-number" :value="value" placeholder="数量" >
-                        <span> + </span>
-                    </div>
-                </div>
-                <div class="cell-list">
-                    <div class="cell-left">
-                        <p class="name">黄豆</p>
-                        <p class="unit"> <span>￥534.11</span>/袋 </p>
-                    </div>
-
-                    <div class="cell-right">
-                        <span> - </span>
-                        <input type="text" class="write-number" :value="value" placeholder="数量" >
-                        <span> + </span>
-                    </div>
-                </div>
-
-            </scroll-view>
-        </div>
+        <shopcart :selectFoods="selectFoods"> </shopcart>
 
     </div>
 </template>
@@ -86,7 +50,7 @@
 import wxp from 'minapp-api-promise'
 import fetch from '@/utils/fetch'
 import cartcontrols from '@/components/cartcontrol/index'
-import shopbottom from '@/components/shopbottom/index'
+import shopcart from '@/components/shopcart/index'
 
 export default{
     data(){
@@ -101,7 +65,6 @@ export default{
             selectIndex:0,              // 点击索引
             index:0,                    // dcId 索引
             categoryName:'当前选项',     // 显示当前点击的分类选项
-            showFalse:false,
             searchName:'',
             value:"1",                  // categoryId
             jiage:'20',
@@ -155,12 +118,6 @@ export default{
         }
     },
     methods:{
-        showHideCar(){
-            this.showFalse = !this.showFalse;
-        },
-        hideCar(){
-            this.showFalse = false;
-        },
         lower(){
             console.log('到底了');
         },
@@ -337,11 +294,20 @@ export default{
                 return this.winHeight - 130 + 'px'
             }
         },
+        selectFoods() {
+            let foods = [];
+            this.list.forEach((good) => {
+                if (good.count) {
+                    foods.push(good);
+                }
+            });
+            return foods;
+        }
 
     },
     components:{
         cartcontrols,
-        shopbottom
+        shopcart
     }
 }
 </script>
@@ -444,89 +410,5 @@ export default{
             }
         }
     }
-
-    .join-car-list{
-        .cell-list-border{
-            .dele-all{
-                text-align: right;
-                font-size: 32rpx;
-                padding-top: 16rpx;
-                padding-right: 16rpx;
-            }
-            height: 600rpx;
-            position: fixed;
-            bottom: 120rpx;
-            background: #fff;
-            width: 100%;
-            z-index: 3;
-            overflow: hidden;
-        }
-        .cell-list{
-            float: right;
-            display: flex;
-            justify-content:space-between;
-            width: 98%;
-            font-size: 32rpx;
-            border-bottom: 1px solid #e9eaec;
-            color:#495060;
-            margin-top: 20rpx;
-            padding-left: 2%;
-            overflow: hidden;
-            padding-bottom: 14rpx;
-            .cell-left{
-                width: 60%;
-                .name{
-                    font-size: 36rpx;
-                }
-                .unit{
-                    font-size: 24rpx;
-                    span{
-                        color: #fc8884;
-                    }
-                }
-            }
-            .cell-right{
-                width: 24%;
-                display: inline-flex;
-                margin-top: 12rpx;
-                padding-right: 12rpx;
-                .write-number{
-                    text-align: center;
-                    height: 60rpx;
-                    line-height: 60rpx;
-                }
-                span{
-                    display: block;
-                    width: 240rpx;
-                    height: 60rpx;
-                    line-height: 56rpx;
-                    border-radius: 50%;
-                    border: 1px solid #dddee1;
-                    text-align: center;
-                    font-size: 44rpx;
-                    font-weight: bold;
-                }
-                span:nth-child(1){
-                    // color: #1e84ec;
-                }
-                span:nth-child(3){
-                    color: #3b3a2e;
-                    background: #fece6a;
-                    border:none;
-                }
-            }
-        }
-    }
-    .maskLayer{
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        left:0;
-        top:0;
-        background: #000;
-        opacity: .4;
-        z-index: 2;
-    }
-
 }
 </style>
