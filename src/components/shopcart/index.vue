@@ -20,9 +20,12 @@
             <p class="settlement">请选购</p>
         </template>
 
-        <div class="maskLayer" v-if="listShow" @click="hideCart"></div>
+        <!-- <transition name="fade">
+            <div class="maskLayer" v-if="listShow" @click="hideCart"></div>
+        </transition> -->
 
-        <div class="join-car-list" v-show="listShow" transition="fade">
+        <transition name="fold">
+            <div class="join-car-list" v-show="listShow" :animation='animationData'>
             <scroll-view scroll-y class="cell-list-border">
                 <div class="hoin-title">
                     <!-- <h1>购物车</h1> -->
@@ -39,6 +42,7 @@
 
             </scroll-view>
         </div>
+        </transition>
 
     </div>
 </template>
@@ -59,6 +63,7 @@ export default{
     data(){
         return {
             fold:true,
+            animationData:{}
         }
     },
     components:{
@@ -67,21 +72,41 @@ export default{
     methods:{
         // 购物车显隐事件
         toggleList(){
-            if (!this.totalCount){
+            let that = this;
+            if (!that.totalCount){
                 return;
             }
+            let animation  = wx.createAnimation({
+                duration:500,
+                timingFunction:'linear'
+              })
+            that.animation = animation
+            animation.translateY(200).step()
+            that.animationData = animation.export()
             this.fold = !this.fold;
+            setTimeout(function(){
+              animation.translateY(0).step()
+              that.animationData = animation.export()
+            },200)
+
         },
         // 点阴影隐藏购物车
         hideCart(){
             this.fold = !this.fold;
         },
-        //清空购物车
+        // 清空购物车
         empty() {
             this.selectFoods.forEach((food) => {
               food.count = 0;
             });
-      },
+       },
+       // 去下单
+       toPAY(){
+            let selectFoods = wx.setStorageSync('selectFoods',this.selectFoods);
+            wx.navigateTo({
+              url: '../../pages/checkOrder/main'
+            })
+       }
     },
     computed:{
         // 总价
@@ -92,7 +117,8 @@ export default{
                 if(!food.count){
                     Vue.set(this.selectFoods,'count',0)
                 }else{
-                    total += food.shippingPrice * food.count;
+                    let rel = (food.shippingPrice * food.count).toFixed(2);
+                    total +=  Number(rel);
                 }
             })
             return total;
@@ -164,7 +190,7 @@ export default{
 .join-car-list{
     position: absolute;
     left: 0;
-    top:0;
+    bottom:0;
     z-index: 3;
     width: 100%;
     .cell-list-border{
@@ -183,24 +209,19 @@ export default{
         overflow: hidden;
     }
     .cell-list{
-        float: right;
         display: flex;
-        justify-content:space-between;
-        width: 98%;
-        font-size: 32rpx;
-        border-bottom: 1px solid #e9eaec;
-        color:#495060;
-        margin-top: 20rpx;
-        padding-left: 2%;
-        overflow: hidden;
-        padding-bottom: 14rpx;
+        justify-content: space-between;
+        border-bottom: 1px solid #f0f5f8;
+        margin-left: 10rpx;
         .cell-left{
             width: 60%;
+            padding: 20rpx 0;
             .name{
-                font-size: 30rpx;
+                font-size: 33rpx;
             }
             .unit{
-                font-size: 24rpx;
+                font-size: 26rpx;
+                padding-top: 6rpx;
                 span{
                     color: #fc8884;
                 }
@@ -208,12 +229,4 @@ export default{
         }
     }
 }
-
-&.fade-transition
-    transition:all 0.1s
-    opacity:1
-    background:rgba(240,20,20,0.5)
-&.fade-enter,&.fade-leave
-    opacity:0
-    background:rgba(240,20,20,0)
 </style>

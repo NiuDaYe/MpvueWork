@@ -8,7 +8,9 @@ app.$mount()
 export default {
     config: {
         usingComponents: {
-             // "i-input": "../../../static/examples/input/index"
+            "i-input": "../../../static/examples/input/index",
+            "i-message": "../../../static/examples/message/index",
+            "i-button": "../../../static/examples/button/index"
         }
     }
 }

@@ -40,6 +40,7 @@
     display: flex;
     margin-top: 12rpx;
     padding-right: 12rpx;
+    padding-top: 20rpx;
     .write-number{
         text-align: center;
         height: 60rpx;

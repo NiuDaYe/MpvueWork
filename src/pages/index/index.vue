@@ -53,7 +53,7 @@ export default {
       exit(){
           wx.removeStorageSync('userInfo');
           setTimeout(function(){
-              wx.navigateTo({
+              wx.redirectTo({
                 url: '../../pages/login/main'
               })
           })

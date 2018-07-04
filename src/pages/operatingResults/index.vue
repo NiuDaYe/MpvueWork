@@ -1,19 +1,21 @@
 <!-- 操作结果页面 -->
 <template>
     <div class="orderResult">
-        <div class="success pubClass" v-if="showFalse">
-            <icon type="success" size="40" color="#1a9bfc"/>
-            <p class="type">下单成功</p>
-            <p class="text">订单已提交，欢迎再次采购</p>
-            <div class="lookOrderList btn">查看订单</div>
-            <p class="returnOrderList">返回商品列表</p>
-        </div>
-        <div class="fail pubClass" v-if="!showFalse">
+        <div class="fail pubClass" v-if="pay == 2">
             <icon type="cancel" size="40" color="red"/>
             <p class="type">下单失败</p>
             <p class="text">支付银行卡余额不足</p>
-            <div class="returnLast btn">返回上级页面</div>
+            <div class="returnLast btn" @click="returnPage">返回上级页面</div>
         </div>
+
+        <div class="success pubClass" v-else>
+            <icon type="success" size="40" color="#1a9bfc"/>
+            <p class="type">下单成功</p>
+            <p class="text">订单已提交，欢迎再次采购</p>
+            <div class="lookOrderList btn" @click="vieworder">查看订单</div>
+            <p class="returnOrderList" @click="returnOrderList">返回商品列表</p>
+        </div>
+
     </div>
 </template>
 
@@ -23,14 +25,32 @@ import wxp from 'minapp-api-promise'
 export default{
     data(){
         return{
-            showFalse:true
+            pay:null
         }
     },
-    async onLoad() {
+    async onLoad(option) {
+        this.pay = option.pay;
         await wxp.setNavigationBarTitle({
           title: '操作结果'
         })
     },
+    methods:{
+        returnPage(){
+            wx.navigateBack({
+              delta: 1
+            })
+        },
+        returnOrderList(){
+            wx.reLaunch({
+              url: '../goods/main'
+            })
+        },
+        vieworder(){
+            wx.navigateTo({
+              url: '../ordersDetail/main'
+            })
+        }
+    }
 
 }
 </script>

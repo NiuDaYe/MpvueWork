@@ -7,113 +7,81 @@
 
         <div class="times">
             <i-cell-group >
-                <i-cell  title="到货日期" value="2018-12-22"></i-cell>
+                <i-cell  title="到货日期" :value="details.inDate"></i-cell>
             </i-cell-group>
         </div>
-
 
         <scroll-view scroll-y class="cell-list-border" @scrolltolower="lower" :style="'height:'+contentHeight">
             <div class="left" v-if="tabShow">
                 <view>
-                    <p class="distributionCenter">
-                        <span>天子星望京配送中心</span>
-                        <!-- <i-icon type="success" size="28" color="#80848f"  /> -->
-                        <i-icon type="success_fill" size="28" color="#1c7efb"  />
-                    </p>
-                    <div class="list">
-                        <div class="name"> <span>紫罗兰+巴菲特里</span> <p class="price"><span>￥12.50</span> <span>*10</span> </p> </div>
-                        <p class="message"> <i-tag>10公斤/袋</i-tag> <span>￥129</span> </p>
-                    </div>
-                    <div class="list">
-                        <div class="name"> <span>紫罗兰+巴菲特里</span> <p class="price"><span>￥12.50</span> <span>*10</span> </p> </div>
-                        <p class="message"> <i-tag>10公斤/袋</i-tag> <span>￥129</span> </p>
+                    <p class="distributionCenter"><span v-if="details.detailList">{{details.detailList[0].dcName}}</span></p>
+                    <div class="list" v-for="item in details.detailList" :key="item">
+                        <div class="name">
+                            <span>{{item.materialName}}</span>
+                            <p class="price"><span>￥{{item.shippingPrice}}</span> <span>* {{item.qty}}</span> </p>
+                        </div>
+                        <p class="message">
+                            <span><i-tag v-if="item.spec">{{item.spec}}</i-tag></span>
+                            <span>￥{{item.individualPrice}}</span>
+                        </p>
                     </div>
                 </view>
-                <view>
-                    <p class="distributionCenter">
-                        <span>天子星望京配送中心</span>
-                        <!-- <i-icon type="success" size="28" color="#80848f"  /> -->
-                        <i-icon type="success_fill" size="28" color="#1c7efb"  />
-                    </p>
-                    <div class="list">
-                        <div class="name"> <span>紫罗兰+巴菲特里</span> <p class="price"><span>￥12.50</span> <span>*10</span> </p> </div>
-                        <p class="message"> <i-tag>10公斤/袋</i-tag> <span>￥129</span> </p>
-                    </div>
-                    <div class="list">
-                        <div class="name"> <span>紫罗兰+巴菲特里</span> <p class="price"><span>￥12.50</span> <span>*10</span> </p> </div>
-                        <p class="message"> <i-tag>10公斤/袋</i-tag> <span>￥129</span> </p>
-                    </div>
-                </view>
-                <view>
-                    <p class="distributionCenter">
-                        <span>天子星望京配送中心</span>
-                        <!-- <i-icon type="success" size="28" color="#80848f"  /> -->
-                        <i-icon type="success_fill" size="28" color="#1c7efb"  />
-                    </p>
-                    <div class="list">
-                        <div class="name"> <span>紫罗兰+巴菲特里</span> <p class="price"><span>￥12.50</span> <span>*10</span> </p> </div>
-                        <p class="message"> <i-tag>10公斤/袋</i-tag> <span>￥129</span> </p>
-                    </div>
-                    <div class="list">
-                        <div class="name"> <span>紫罗兰+巴菲特里</span> <p class="price"><span>￥12.50</span> <span>*10</span> </p> </div>
-                        <p class="message"> <i-tag>10公斤/袋</i-tag> <span>￥129</span> </p>
-                    </div>
-                </view>
-                <div class="list">
-                    <div class="name"> <span>紫罗兰+巴菲特里</span> <p class="price"><span>￥12.50</span> <span>*10</span> </p> </div>
-                    <p class="message"> <i-tag>10公斤/袋</i-tag> <span>￥129</span> </p>
-                </div>
-                <div class="list">
-                    <div class="name"> <span>紫罗兰+巴菲特里</span> <p class="price"><span>￥12.50</span> <span>*10</span> </p> </div>
-                    <p class="message"> <i-tag>10公斤/袋</i-tag> <span>￥129</span> </p>
-                </div>
-                <div class="list">
-                    <div class="name"> <span>紫罗兰+巴菲特里</span> <p class="price"><span>￥12.50</span> <span>*10</span> </p> </div>
-                    <p class="message"> <i-tag>10公斤/袋</i-tag> <span>￥129</span> </p>
-                </div>
-                <div class="list">
-                    <div class="name"> <span>紫罗兰+巴菲特里</span> <p class="price"><span>￥12.50</span> <span>*10</span> </p> </div>
-                    <p class="message"> <i-tag>10公斤/袋</i-tag> <span>￥129</span> </p>
-                </div>
             </div>
 
             <div class="right" v-if="!tabShow">
-
                 <div class="header_adreass">
                     <i-icon class="coordinates_fill" type="coordinates_fill" size="24" color="#989898"/>
                     <div class="address_detail">
-                        <p> <span>收货人:天子星</span> <span>18500062202</span> </p>
-                        <p>收货地址:北京市朝阳区望京科技园</p>
+                        <p> <span>收货人:{{information.linkman}}</span> <span>{{information.phone}}</span> </p>
+                        <p>收货地址:{{information.address}}</p>
                     </div>
                     <i-icon class="enter" type="enter" size="16"/>
                 </div>
 
                 <dl class="orderMesage">
                     <dt>单据信息</dt>
-                    <dd> <span>订单号</span> <span>DHCN0007201801300003</span> </dd>
-                    <dd> <span>支付金额</span> <span class="pubColor">￥1000.00</span>  </dd>
-                    <dd> <span>支付方式</span> <span>微信支付</span> </dd>
-                    <dd> <span>下单时间</span> <span>2018-01-10 12:00</span> </dd>
-                    <dd> <span>结算方式</span> <span>月结</span> </dd>
+                    <dd> <span>订单号</span> <span>{{details.billNo}}</span> </dd>
+                    <dd> <span>支付金额</span> <span class="pubColor">￥{{details.paymentAmt}}</span>  </dd>
+                    <dd> <span>支付方式</span> <span>{{details.paymentType}}</span> </dd>
+                    <dd> <span>下单时间</span> <span>{{details.orderDate}}</span> </dd>
+                    <dd> <span>结算方式</span> <span>{{details.clearingType}}</span> </dd>
                 </dl>
-
             </div>
-
         </scroll-view>
 
         <div class="checkOrderBottom">
             <div class="price">
-                <p>&nbsp;&nbsp;&nbsp;合计： <span>￥0</span> </p>
-                <p>待支付：<span>￥0</span> </p>
+                <p>&nbsp;&nbsp;&nbsp;合计： <span>￥{{totalPrice}}</span> </p>
+                <p>待支付：<span>￥{{totalPrice}}</span> </p>
             </div>
-            <div class="btn">去支付</div>
+            
+            <template v-if="detailMessage.state == 'sourceOrderPay'">
+                <div class="btn" @click="topay">支付</div>
+            </template>
+
+            <template v-else-if="detailMessage.state == 'savedDcOrder'">
+                <div class="btn" v-if="isReceiv" @click="showReceiving">确认收货</div>
+            </template>
         </div>
+
+
+        <i-modal title="支付" :visible="visiblePay" :actions="actionsPay" @click="showPayList">
+            <view>请选择支付方式</view>
+        </i-modal>
+
+        <i-modal title="收货确认" :visible="visibleCannot" :actions="actionsCannot" @click="operationReceiving">
+            <view>是否确认收货？</view>
+        </i-modal>
+
+        <i-message id="message" />
 
     </div>
 </template>
 
 <script>
 import wxp from 'minapp-api-promise'
+import fetch from '@/utils/fetch'
+const { $Message } = require('../../../static/examples/base/index');
 
 export default{
     data(){
@@ -121,49 +89,240 @@ export default{
             currentTab: 'tab1',
             winHeight:null,
             tabShow:true,
-            current:'苹果',
-            fruit: [{
-                id: 1,
-                name: '香蕉',
-            }, {
-                id: 2,
-                name: '苹果'
-            }, {
-                id: 3,
-                name: '西瓜'
-            }, {
-                id: 4,
-                name: '葡萄',
-            }],
+            details:{},
+            information:{
+                address:'',
+                linkman:'',
+                phone:''
+            },
+            detailMessage:{},
+            visiblePay:false,               // 支付列表
+            visibleCannot:false,            // 取消订单弹窗
+            isReceiv:true,                  // 是否收货
+            actionsPay: [
+                {
+                    name: '支付宝',
+                    color: '#2d8cf0',
+                },
+                {
+                    name: '微信',
+                    color: '#19be6b'
+                },
+                {
+                    name: '余额',
+                    color: '#19be6b'
+                }
+            ],
+            actionsCannot: [
+                {
+                    name: '取消'
+                },
+                {
+                    name: '确定',
+                    color: '#ed3f14'
+                }
+            ]
         }
     },
     methods:{
         handleChange (detail) {
             this.currentTab = detail.mp.detail.key;
             if(this.currentTab == "tab1"){
-                console.log('这是物品详情');
                 this.tabShow = true;
             }else if(this.currentTab == "tab2"){
-                console.log('这是订单信息');
                 this.tabShow = false;
             }
         },
-        handleFruitChange(detail = {}){
-            this.current = detail.value
+        getDetailInfo(){
+            let _this = this;
+            this.detailMessage = wx.getStorageSync('detailMessage');
+            let detailMessage = wx.getStorageSync('detailMessage');
+            if(detailMessage.state == "sourceOrderPay"){ detailMessage.state = "sourceOrder"; }
+
+            let data = {
+                "tenancy_id": detailMessage.tenancy_id,
+                "store_id": detailMessage.store_id,
+                "data":[{
+                       "id": detailMessage.id,
+                       "dataType": detailMessage.state
+                 }]
+            }
+
+            wx.showLoading({title: '加载中...',})
+            fetch.post('/appOrder/findOrderDetail', data)
+            .then(function (res) {
+                if(res.errcode == 0){
+                    // let dealStatus = res.data[0].dealStatus;
+                    // if(dealStatus == "0"){
+                    //     _this.detailMessage.state = "sourceOrderPay";
+                    // }else if(dealStatus == "1"){
+                    //     _this.detailMessage.state = "savedDcOrder";
+                    // }else if(dealStatus == "2"){
+                    //     _this.detailMessage.state = "";
+                    // }
+
+                    res.data[0].detailList.map((item)=>{
+                        item.individualPrice = (Number(item.qty * item.shippingPrice)).toFixed(2);
+                    })
+                    _this.details = res.data[0];
+                    setTimeout(function(){wx.hideLoading()},1000)
+                }else{
+                    wx.hideLoading()
+                    $Message({
+                        content: res.errmsg,
+                        type: 'error'
+                    });
+                }
+            })
+            .catch(function (error) {
+                wx.hideLoading()
+                $Message({
+                    content: "加载失败",
+                    type: 'error'
+                });
+            });
+        },
+        showReceiving(){
+            this.visibleCannot = true;
+        },
+        topay(id){
+            this.visiblePay = true;
+        },
+        showPayList(e){
+            const index = e.mp.detail.index;
+            if (index === 0) {
+                console.log('调支付宝支付');
+            } else if (index === 1) {
+                console.log('调微信支付');
+            }else if(index === 2){
+                console.log('调余额支付');
+                this.balancePay();
+            }
+            this.visiblePay = false;
+        },
+        operationReceiving(e){
+            const index = e.mp.detail.index;
+            let _this = this;
+            if(index === 0){
+                _this.visibleCannot = false;
+            } else if (index === 1){
+                _this.receiving();  // 调确认收货接口
+            }
+        },
+        // 确认收货
+        receiving(){
+            let userInfo = wx.getStorageSync('userInfo');
+            let detailMessage = wx.getStorageSync('detailMessage');    //  详情页单个产品信息
+            let _this = this;
+            let data = {
+                "tenancy_id": userInfo.tenancyId,
+                "store_id": userInfo.storeId,
+                "data":[{
+                          "id": detailMessage.id,
+                          "entryId": userInfo.userId,
+                          "entryName": userInfo.userName,
+                          "entryCode": userInfo.userCode
+                }]
+            }
+
+            fetch.post('/appOrder/confirmReceive', data)
+            .then(function (res) {
+                if(res.errcode == 0){
+                    _this.visibleCannot = false;
+                    _this.isReceiv = false;
+                    $Message({
+                        content: '收货成功！',
+                        type: 'success'
+                    });
+                }else{
+                    _this.visibleCannot = false;
+                    $Message({
+                        content: res.errmsg,
+                        type: 'error'
+                    });
+                }
+            })
+            .catch(function (error) {
+                _this.visibleCannot = false;
+                $Message({
+                    content: "确认收货失败！",
+                    type: 'error'
+                });
+            });
+        },
+        // 余额支付
+        balancePay(){
+            let _this = this;
+            let userInfo = wx.getStorageSync('userInfo');
+            let detailMessage = wx.getStorageSync('detailMessage');
+
+            let data = {
+                 "tenancy_id": userInfo.tenancyId,
+                 "store_id": userInfo.storeId,
+                 "userId": userInfo.userId,
+                 "userName": userInfo.userName,
+                 "userCode": userInfo.userCode,
+                 "data":[{
+                           "id": detailMessage.id,
+                 }]
+            }
+
+            fetch.post('/appOrder/balancePayment', data)
+            .then(function (res) {
+                if(res.errcode == 0){
+                    _this.visiblePay = false;
+                    $Message({
+                        content: '余额支付成功！',
+                        type: 'success'
+                    });
+
+                    wx.reLaunch({
+                      url: '../operatingResults/main?pay=1'
+                    })
+                }else{
+                    _this.visiblePay = false;
+                    $Message({
+                        content: res.errmsg,
+                        type: 'error'
+                    });
+                }
+            })
+            .catch(function (error) {
+                _this.visiblePay = false;
+                $Message({
+                    content: "余额支付失败！",
+                    type: 'error'
+                });
+            });
+
         }
     },
     async onLoad() {
         let info = await wxp.getSystemInfo();
+        let userInfo = wx.getStorageSync('userInfo');
         this.winHeight = info.windowHeight;
         await wxp.setNavigationBarTitle({
           title: '订单详情'
         })
+        this.getDetailInfo();
+        this.information.address = userInfo.address
+        this.information.linkman = userInfo.linkman
+        this.information.phone = userInfo.phone
     },
     computed: {
         contentHeight(){
             if (this.winHeight) {
                 return this.winHeight - 150 + 'px'
             }
+        },
+        totalPrice(){
+            let total = 0;
+            if(this.details.detailList){
+                this.details.detailList.map((item)=>{
+                    total += Number(item.individualPrice);
+                })
+            }
+            return total;
         }
     },
 }
@@ -268,7 +427,7 @@ export default{
         background: #fff;
         margin-top: 30rpx;
         dt{
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid #f0f0f0;
             height: 70rpx;
             line-height: 70rpx;
             display: block;
@@ -279,7 +438,7 @@ export default{
         dd{
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid #f0f0f0;
             color: #999999;
             padding:0 30rpx;
             font-size: 28rpx;
