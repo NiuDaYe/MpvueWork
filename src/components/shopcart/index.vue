@@ -1,47 +1,47 @@
 <template >
     <div class="join-car">
-        <div class="price" @tap="toggleList">
-            <i-badge :count="totalCount">
-                <template v-if="totalCount > 0">
-                    <i-icon size="38" type="publishgoods_fill" color="#1e84ec"/>
+        <div class="join-car">
+            <div class="price" @tap="toggleList">
+                <i-badge :count="totalCount">
+                    <template v-if="totalCount > 0">
+                        <i-icon size="38" type="publishgoods_fill" color="#1e84ec"/>
+                    </template>
+                    <template v-else>
+                        <i-icon size="38" type="publishgoods_fill" />
+                    </template>
+                </i-badge>
+                <template v-if="totalPrice != null">
+                    {{totalPrice}} 元
                 </template>
-                <template v-else>
-                    <i-icon size="38" type="publishgoods_fill" />
-                </template>
-            </i-badge>
-            <template v-if="totalPrice != null">
-                {{totalPrice}} 元
+            </div>
+            <template v-if="totalCount > 0">
+                <p class="settlement settlementActive" @click="toPAY">去结算</p>
+            </template>
+            <template v-else>
+                <p class="settlement">请选购</p>
             </template>
         </div>
-        <template v-if="totalCount > 0">
-            <p class="settlement settlementActive" @click="toPAY">去结算</p>
-        </template>
-        <template v-else>
-            <p class="settlement">请选购</p>
-        </template>
 
-        <!-- <transition name="fade">
+        <transition name="fade">
             <div class="maskLayer" v-if="listShow" @click="hideCart"></div>
-        </transition> -->
+        </transition>
 
         <transition name="fold">
             <div class="join-car-list" v-show="listShow" :animation='animationData'>
-            <scroll-view scroll-y class="cell-list-border">
-                <div class="hoin-title">
-                    <!-- <h1>购物车</h1> -->
-                    <p class="dele-all" @click="empty">清空购物车</p>
-                </div>
-
-                <div class="cell-list" v-for="item in selectFoods" wx:key="key">
-                    <div class="cell-left">
-                        <p class="name">{{item.materialName}}</p>
-                        <p class="unit"> <span>￥{{item.shippingPrice}}</span>/{{item.unitName}} </p>
+                <scroll-view scroll-y class="cell-list-border">
+                    <div class="hoin-title">
+                        <p class="dele-all" @click="empty">清空购物车</p>
                     </div>
-                    <cartcontrols :list="item"> </cartcontrols>
-                </div>
 
-            </scroll-view>
-        </div>
+                    <div class="cell-list" v-for="item in selectFoods" wx:key="key">
+                        <div class="cell-left">
+                            <p class="name">{{item.materialName}}</p>
+                            <p class="unit"> <span>￥{{item.shippingPrice}}</span>/{{item.unitName}} </p>
+                        </div>
+                        <cartcontrols :list="item"> </cartcontrols>
+                    </div>
+                </scroll-view>
+            </div>
         </transition>
 
     </div>
@@ -77,31 +77,53 @@ export default{
                 return;
             }
             let animation  = wx.createAnimation({
-                duration:500,
-                timingFunction:'linear'
-              })
-            that.animation = animation
-            animation.translateY(200).step()
-            that.animationData = animation.export()
-            this.fold = !this.fold;
-            setTimeout(function(){
-              animation.translateY(0).step()
-              that.animationData = animation.export()
-            },200)
+                duration:300,
+                timingFunction:'ease'
+             })
+             that.animation = animation
+             animation.translateY(220).step()
+             that.animationData = animation.export()
 
+            if(this.fold == true){
+                that.fold = false;
+                setTimeout(function () {
+                  animation.translateY(0).step()
+                  that.animationData = animation.export()
+                }, 200)
+
+            }else if(this.fold == false){
+                setTimeout(function () {
+                  animation.translateY(0).step()
+                  that.animationData = animation.export()
+                  that.fold = true
+
+                }, 200)
+            }
         },
         // 点阴影隐藏购物车
         hideCart(){
-            this.fold = !this.fold;
+            let that = this;
+            let animation = wx.createAnimation({
+              duration:300,
+              timingFunction:'linear'
+            })
+            that.animation = animation
+            animation.translateY(220).step()
+            that.animationData = animation.export()
+            setTimeout(function () {
+              animation.translateY(0).step()
+              that.animationData = animation.export()
+              that.fold = true;
+            }, 200)
         },
         // 清空购物车
         empty() {
             this.selectFoods.forEach((food) => {
               food.count = 0;
             });
-       },
-       // 去下单
-       toPAY(){
+        },
+        // 去下单
+        toPAY(){
             let selectFoods = wx.setStorageSync('selectFoods',this.selectFoods);
             wx.navigateTo({
               url: '../../pages/checkOrder/main'
@@ -156,9 +178,10 @@ export default{
     background: #f8f8f9;
     position: fixed;
     bottom: 0;
-    z-index: 3;
+    z-index: 13;
     display: flex;
     justify-content:space-between;
+
     .price{
         height: 120rpx;
         line-height: 120rpx;
@@ -188,7 +211,7 @@ export default{
     background: rgba(7,17,27,0.6);
 }
 .join-car-list{
-    position: absolute;
+    position: fixed;
     left: 0;
     bottom:0;
     z-index: 3;
@@ -200,12 +223,12 @@ export default{
             padding-top: 16rpx;
             padding-right: 16rpx;
         }
-        max-height: 500rpx;
+        max-height: 600rpx;
         position: fixed;
         bottom: 120rpx;
         background: #fff;
         width: 100%;
-        z-index: 3;
+        z-index: 2;
         overflow: hidden;
     }
     .cell-list{

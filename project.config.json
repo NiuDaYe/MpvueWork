@@ -12,6 +12,11 @@
 	"appid": "wx059d9caa6935d61a",
 	"projectname": "niuyulei",
 	"libVersion": "1.9.9",
+	"scripts": {
+		"beforeCompile": "",
+		"beforePreview": "",
+		"beforeUpload": ""
+	},
 	"condition": {
 		"search": {
 			"current": -1,

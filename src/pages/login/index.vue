@@ -41,7 +41,7 @@ export default{
     data(){
         return{
             tenancyId: '',
-            userName: 'lqqdan',
+            userName: 'lichangwei',
             password: '123456',
             buer:false
         }
