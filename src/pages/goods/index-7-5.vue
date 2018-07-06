@@ -16,7 +16,7 @@
         </div>
         <div class="googs">
             <div class="menu-wrapper" ref="menuWrapper">
-                <scroll-view scroll-y class="left-con" :style="'height:'+contentLeftHeight" scroll-with-animation='true'>
+                <scroll-view scroll-y class="left-con" :style="'height:'+contentLeftHeight" >
 
                     <li class="telmp" v-for="(item,index) in list" :key="item" :class="{'checkActive': 'v'+index == selectIndex}" >
                          <p @click="clickFindDcMaterialInfo" :id="'v'+index">{{item.categoryName}}</p>
@@ -26,7 +26,7 @@
             </div>
 
             <div class="foods-wrapper">
-                <scroll-view scroll-y class="cell-list-border" @scroll="leftmenu" @scroll-top="scrollTop" scroll-with-animation='true' :scroll-into-view="toView" :style="'height:'+contentRightHeight">
+                <scroll-view scroll-y class="cell-list-border" @scroll="leftmenu" @scroll-top="scrollTop" :scroll-into-view="toView" :style="'height:'+contentRightHeight">
 
                     <div class="cell-list" v-for="(item,index) in list" :key="index" :id="'v'+index">
                         <div class="show-tittle">
@@ -779,8 +779,8 @@ export default{
         //         break
         //       }
         //     }
-        //     if (index != this.selectIndex) {
-        //         this.selectIndex = index;
+        //     if ('v'+index != this.selectIndex) {
+        //         this.selectIndex = 'v'+index;
         //     }
         // },
         // 模糊搜索商品

@@ -54,7 +54,7 @@
                 <p>&nbsp;&nbsp;&nbsp;合计： <span>￥{{totalPrice}}</span> </p>
                 <p>待支付：<span>￥{{totalPrice}}</span> </p>
             </div>
-            
+
             <template v-if="detailMessage.state == 'sourceOrderPay'">
                 <div class="btn" @click="topay">支付</div>
             </template>
@@ -356,7 +356,7 @@ export default{
         }
     }
     .checkOrderBottom{
-        width: 100%;
+        width: 98%;
         height: 100rpx;
         border-top: 1px solid #cccccc;
         display: flex;
@@ -364,6 +364,7 @@ export default{
         position: fixed;
         bottom:0;
         background: #ffffff;
+        padding-left: 2%;
         .price{
             color:#333333;
             font-size: 30rpx;

@@ -275,9 +275,10 @@ export default{
 <style scoped lang="scss">
 .checkOrder{
     background: #f2f2f2;
+    color: #495060;
     .header_adreass{
         display:flex;
-        border-bottom: 1rpx solid #e4e4e4;
+        border-bottom: 1rpx solid #f0f5f8;
         padding-bottom: 18rpx;
         background: #fff;
         .coordinates_fill{
@@ -309,7 +310,7 @@ export default{
         font-size: 28rpx;
         padding-top: 20rpx;
         padding-bottom: 20rpx;
-        border-bottom: 8rpx solid #e4e4e4;
+        border-bottom: 8rpx solid #f0f5f8;
         background: #fff;
         span:nth-child(1){
             padding-left: 56rpx;
@@ -321,13 +322,13 @@ export default{
     }
 
     .detailsList{
-        border-bottom: 1px solid #e4e4e4;
+        border-bottom: 1px solid #f0f5f8;
         border-top: 1px solid #e4e4e4;
         margin-top: 12rpx;
         background: #fff;
         .distributionCenter{
             text-indent: 2em;
-            border-bottom: 1px solid #e4e4e4;
+            border-bottom: 1px solid #f0f5f8;
             font-size: 26rpx;
             line-height: 58rpx;
         }
@@ -345,7 +346,7 @@ export default{
                 color: #999999;
                 .fontOne{
                     font-size: 28rpx;
-                    color: #333333;
+                    color: #495060;
                 }
             }
         }
@@ -354,12 +355,12 @@ export default{
     .checkOrderBottom{
         width: 100%;
         height: 100rpx;
-        border-top: 1px solid #cccccc;
         display: flex;
         justify-content:flex-end;
         position: fixed;
         bottom:0;
         background: #ffffff;
+        color: #495060;
         .price{
             color:#333333;
             font-size: 30rpx;
