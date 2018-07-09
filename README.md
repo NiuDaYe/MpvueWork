@@ -1,7 +1,5 @@
 # niuyulei
 
-> A Mpvue project
-
 ## Build Setup
 
 ``` bash

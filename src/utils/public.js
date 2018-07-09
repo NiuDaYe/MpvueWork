@@ -18,7 +18,21 @@ export function formatTime (date) {
   return `${t1} ${t2}`
 }
 
+export function LeftMenuFun(array) {
+    let temp = []
+    let grouplength = array.length
+    for (let k = 0; k < grouplength; k++) {
+        if (k == 0) {
+            temp[k] = array[k].materialList.length * 66 + 30
+            continue
+        }
+        temp[k] = (array[k].materialList.length * 66 + 30) + temp[k - 1]
+    }
+    return temp
+}
+
 export default {
   formatNumber,
-  formatTime
+  formatTime,
+  LeftMenuFun
 }

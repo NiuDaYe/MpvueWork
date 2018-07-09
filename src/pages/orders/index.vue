@@ -190,7 +190,7 @@ export default{
                 }else{
                     $Message({
                         content: "订单列表获取失败",
-                        type: res.errmsg
+                        type: 'error'
                     });
                 }
             })
@@ -216,6 +216,7 @@ export default{
         },
         topay(id){
             this.visiblePay = true;
+            this.thisId = id;
         },
         showPayList(e){
             const index = e.mp.detail.index;
@@ -289,7 +290,6 @@ export default{
         balancePay(){
             let _this = this;
             let userInfo = wx.getStorageSync('userInfo');
-            let detailMessage = wx.getStorageSync('detailMessage');
 
             let data = {
                  "tenancy_id": userInfo.tenancyId,
@@ -298,11 +298,10 @@ export default{
                  "userName": userInfo.userName,
                  "userCode": userInfo.userCode,
                  "data":[{
-                           "id": detailMessage.id,
+                           "id": this.thisId,
                  }]
             }
             data = JSON.stringify(data);
-            console.log('data',data);
             fetch.post('/appOrder/balancePayment', data)
             .then(function (res) {
                 if(res.errcode == 0){

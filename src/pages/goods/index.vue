@@ -1,8 +1,6 @@
 <!-- 产品页面 -->
 <template>
-
-    <div class="">
-
+    <div>
         <div class="search">
             <view class="selectDcid">
               <picker @change="bindPickerChange" :value="index" range-key="dcName" :range="dcList">
@@ -16,17 +14,15 @@
         </div>
         <div class="googs">
             <div class="menu-wrapper" ref="menuWrapper">
-                <scroll-view scroll-y class="left-con" :style="'height:'+contentLeftHeight" scroll-with-animation='true'>
-
-                    <li class="telmp" v-for="(item,index) in list" :key="item" :class="{'checkActive': 'v'+index == selectIndex}" >
+                <scroll-view scroll-y class="left-con" :style="'height:'+contentHeight" scroll-with-animation='true'>
+                    <li class="telmp" v-for="(item,index) in list" :key="item" :class="{'checkActive': index == selectIndex}" >
                          <p @click="clickFindDcMaterialInfo" :id="'v'+index">{{item.categoryName}}</p>
                     </li>
-
                 </scroll-view>
             </div>
 
             <div class="foods-wrapper">
-                <scroll-view scroll-y class="cell-list-border" @scroll="leftmenu" @scroll-top="scrollTop" scroll-with-animation='true' :scroll-into-view="toView" :style="'height:'+contentRightHeight">
+                <scroll-view scroll-y class="cell-list-border" @scroll="leftmenu" scroll-with-animation='true' :scroll-into-view="toView" :style="'height:'+contentHeight">
 
                     <div class="cell-list" v-for="(item,index) in list" :key="index" :id="'v'+index">
                         <div class="show-tittle">
@@ -42,15 +38,10 @@
                     </div>
 
                 </scroll-view>
-
             </div>
-
             <shopcart :selectFoods="selectFoods"> </shopcart>
-
         </div>
-
     </div>
-
 </template>
 
 <script>
@@ -58,12 +49,11 @@ import wxp from 'minapp-api-promise'
 import fetch from '@/utils/fetch'
 import cartcontrols from '@/components/cartcontrol/index'
 import shopcart from '@/components/shopcart/index'
-import '../../../static/css/rest.wxss'
+import { LeftMenuFun } from '@/utils/public'
 
 export default{
     data(){
         return{
-            selectIndex: 'v0',           // 点击索引
             index:0,                    // dcId 索引
             searchName:'',
             value:"1",                  // categoryId
@@ -674,7 +664,8 @@ export default{
                     ]
                 },
             ],                      // 右侧物品列表
-            toView: 'v0',
+            selectIndex: 0,         // 点击索引
+            toView: '',
         }
     },
     methods:{
@@ -751,38 +742,31 @@ export default{
         },
         // 点击查找可用物品 -- > 改成跳转到获取到的商品动画
         clickFindDcMaterialInfo(e){
+            let _this = this;
             this.selectIndex = e.currentTarget.id;
             let gotoList = e.currentTarget.id;
             this.toView = gotoList;
+            setTimeout(()=>{
+                _this.toView = "";
+            },100)
         },
-        LeftMenuFun(array) {
-            let temp = []
-            //获得长度 表示有几个group 一个group 32rpx
-            let grouplength = array.length
-            //取得结束坐标
-            for (let k = 0; k < grouplength; k++) {
-                if (k == 0) {
-                    temp[k] = array[k].materialList.length * 66 + 30
-                    continue
-                }
-                temp[k] = (array[k].materialList.length * 66 + 30) + temp[k - 1]
+        // 联动左侧效果
+        leftmenu(e){
+            var temp = LeftMenuFun(this.list);
+            var len = temp.length
+            var index = 0
+            for (var i = 0; i < len; i++) {
+              if (temp[i] > e.mp.detail.scrollTop) {
+                  index =  i;
+                  break;
+              }
             }
-            return temp
+            console.log('index',index);
+            if (index!=this.selectIndex) {
+                this.selectIndex = index;
+                //this.toView = 'v'+index;
+            }
         },
-        // leftmenu(e){
-        //     let temp = this.LeftMenuFun(this.list);
-        //     let len = temp.length
-        //     let index = 0
-        //     for (let i = 0; i < len; i++) {
-        //       if (temp[i] > e.mp.detail.scrollTop) {
-        //         index =  i
-        //         break
-        //       }
-        //     }
-        //     if (index != this.selectIndex) {
-        //         this.selectIndex = index;
-        //     }
-        // },
         // 模糊搜索商品
         searchList(event){
             let list = this.list;
@@ -800,7 +784,6 @@ export default{
     		console.log('arr',arr)
 
         }
-
     },
     watch:{
         dcList:{
@@ -818,16 +801,10 @@ export default{
         this.getDistributionCenter();   // 配送中心
     },
     computed: {
-        // 左侧高度
-        contentLeftHeight() {
+        // 高度
+        contentHeight() {
             if (this.winHeight) {
                 return this.winHeight - 96 + 'px'
-            }
-        },
-        // 右侧高度
-        contentRightHeight(){
-            if (this.winHeight) {
-                return this.winHeight - 126  + 'px'
             }
         },
         // 选择后的数据同步购物车

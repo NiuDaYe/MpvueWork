@@ -160,7 +160,7 @@ export default{
                     // }else if(dealStatus == "2"){
                     //     _this.detailMessage.state = "";
                     // }
-
+                    
                     res.data[0].detailList.map((item)=>{
                         item.individualPrice = (Number(item.qty * item.shippingPrice)).toFixed(2);
                     })

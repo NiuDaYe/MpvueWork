@@ -1,21 +1,6 @@
 <template>
   <div class="login">
 
-      <!-- iview组件 input不能双向数据绑定  再试试？ -->
-
-      <!-- <div class="pubClass">
-          <input type="text" v-model="tenancyId" placeholder="请输入商户名">
-      </div>
-      <div class="pubClass">
-          <input type="text" v-model="userName" placeholder="请输入用户名">
-      </div>
-
-      <div class="pubClass">
-          <input type="password" v-model="password" placeholder="请输入密码">
-      </div>
-
-       -->
-
         <i-panel title="基础用法">
             <i-input :value="tenancyId" title="商户名" placeholder="请输入商户名" maxlength=-1 @change="tenancyIdFn"/>
             <i-input :value="userName" type="number" title="用户名" placeholder="请输入用户名" maxlength=-1 @change="userNameFn"/>
@@ -42,7 +27,7 @@ export default{
         return{
             tenancyId: '',
             userName: 'lichangwei',
-            password: '123456',
+            password: '',
             buer:false
         }
     },
@@ -103,6 +88,12 @@ export default{
                     }
 
                 }
+            }).catch(function(){
+                _this.buer = false;
+                $Message({
+                    content: '登录失败！',
+                    type: 'error'
+                });
             })
         },
         tenancyIdFn(event){
