@@ -7,17 +7,36 @@ Layout.mpType = 'app'
 const app = new Vue(Layout)
 app.$mount()
 
-let info = wx.getStorageSync('userInfo');
+// wx.clearStorageSync();
 
-// if(!info){
-//     wx.navigateTo({
-//       url: 'pages/login/main'
+// let user = wx.getStorageSync('user');
+// let userInfo = wx.getStorageSync('userInfo');
+//
+//
+// if(!user){
+//     wx.reLaunch({
+//       url: 'pages/welcome/main'
 //     })
 // }else{
-//     wx.navigateTo({
-//       url: 'pages/index/main'
-//     })
+//     if(!userInfo){
+//         wx.reLaunch({
+//           url: 'pages/login/main'
+//         })
+//     }else{
+//         wx.reLaunch({
+//           url: 'pages/index/main'
+//         })
+//     }
 // }
+
+
+let userInfo = wx.getStorageSync('userInfo');
+    if(!userInfo){
+        wx.reLaunch({
+          url: 'pages/login/main'
+        })
+    }
+
 
 export default {
     // 这个字段走 app.json

@@ -1,7 +1,7 @@
 {
 	"description": "项目配置文件",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -77,6 +77,12 @@
 					"id": -1,
 					"name": "ordersDetail",
 					"pathName": "pages/ordersDetail/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "welcome",
+					"pathName": "pages/welcome/main",
 					"query": ""
 				}
 			]

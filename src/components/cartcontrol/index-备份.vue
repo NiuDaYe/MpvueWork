@@ -1,9 +1,8 @@
 <template>
     <div class="cell-right">
-        <span @click="addCart"> + </span>
-        <input type="number"  v-show="list.count>0" class="write-number" v-model="list.count" placeholder="0" >
         <span @click="reduceCart" v-show="list.count>0"> - </span>
-
+        <input type="number"  v-show="list.count>0" class="write-number" v-model="list.count" placeholder="0" >
+        <span @click="addCart"> + </span>
     </div>
 </template>
 
@@ -43,8 +42,6 @@
     margin-top: 12rpx;
     padding-right: 12rpx;
     padding-top: 20rpx;
-    display: flex;
-    flex-direction:row-reverse;
     .write-number{
         text-align: center;
         height: 60rpx;
@@ -61,10 +58,10 @@
         font-size: 44rpx;
         font-weight: bold;
     }
-    span:nth-child(3){
+    span:nth-child(1){
         color: #1e84ec;
     }
-    span:nth-child(1){
+    span:nth-child(3){
         color: #fff;
         background: #1e84ec;
         border:none;

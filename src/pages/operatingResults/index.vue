@@ -13,7 +13,8 @@
             <p class="type">下单成功</p>
             <p class="text">订单已提交，欢迎再次采购</p>
             <div class="lookOrderList btn" @click="vieworder">查看订单</div>
-            <p class="returnOrderList" @click="returnOrderList">返回商品列表</p>
+            <p class="returnOrderList" @click="returnGoodsList">返回商品列表</p>
+            <p class="returnOrderList" @click="returnOrderList">返回订单列表</p>
         </div>
 
     </div>
@@ -40,9 +41,14 @@ export default{
               delta: 1
             })
         },
-        returnOrderList(){
+        returnGoodsList(){
             wx.reLaunch({
               url: '../goods/main'
+            })
+        },
+        returnOrderList(){
+            wx.reLaunch({
+              url: '../orders/main'
             })
         },
         vieworder(){

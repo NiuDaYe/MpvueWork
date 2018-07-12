@@ -26,7 +26,7 @@
         <scroll-view scroll-y class="cell-list-border" @scrolltolower="lower" :style="'height:'+contentHeight">
 
             <div class="detailsList">
-                <p class="distributionCenter">北京配送中心</p>
+                <p class="distributionCenter">{{selectFoods[0].dcName}}</p>
 
                 <div class="details" v-for="item in selectFoods" :key="item">
                     <p>
@@ -78,18 +78,20 @@ export default{
             visiblePay:false,               // 支付列表
             actionsPay: [
                 {
-                    name: '支付宝',
-                    color: '#2d8cf0',
-                },
-                {
                     name: '微信',
-                    color: '#19be6b'
+                    color: '#2d8cf0'
                 },
                 {
                     name: '余额',
                     color: '#19be6b'
                 }
             ],
+            prepay_id:{
+                billNo:'',
+                paymentAmt:'',
+                id:''
+            },                              // 订单号  支付时使用
+            OPENID:{}
         }
     },
     async onLoad() {
@@ -109,9 +111,9 @@ export default{
         this.winHeight = info.windowHeight;
         this.date = myDate.getFullYear() + "-" + myDate.getMonth() + "-" + myDate.getDate();
 
-        this.information.address = userInfo.address
-        this.information.linkman = userInfo.linkman
-        this.information.phone = userInfo.phone
+        this.information.address = userInfo.address;
+        this.information.linkman = userInfo.linkman;
+        this.information.phone = userInfo.phone;
 
     },
     methods:{
@@ -121,11 +123,8 @@ export default{
         showPayList(e){
             const index = e.mp.detail.index;
             if (index === 0) {
-                console.log('调支付宝支付');
-            } else if (index === 1) {
-                console.log('调微信支付');
-            }else if(index === 2){
-                console.log('调余额支付');
+                this.wxPay();
+            }else if(index === 1){
                 this.balancePay();
             }
             this.visiblePay = false;
@@ -183,11 +182,12 @@ export default{
                     wx.setStorageSync('detailMessage',data);    //  进详情页使用  存单个产品信息
 
                     if(res.data[0].needToPay == false){         // 不需要支付的话 跳转到下单成功页面
-                        //console.log('resssss',res);           //查看提交订单后返回的数据 唯一订单号  支付时使用
                         wx.redirectTo({
                           url: '../operatingResults/main?pay=1'
                         })
                     }else if(res.data[0].needToPay == true){
+                        _this.prepay_id = res.data[0];          //查看提交订单后返回的数据 唯一订单号  支付时使用
+                        _this.getopenID();                      // 获取openID
                         _this.visiblePay = true;
                     }
                 }else{
@@ -202,6 +202,38 @@ export default{
                     content: "提交订单失败！",
                     type: 'error'
                 });
+            });
+        },
+        getopenID(){
+            let userInfo = wx.getStorageSync('userInfo');
+            let _this = this;
+            wx.login({
+                success: function(res) {
+                    if (res.code) {
+                        let data = {
+                            "data":[res.code],
+                            "pagination":null,
+                            "store_id": userInfo.storeId,
+                            "tenancy_id": userInfo.tenancyId,
+                            "userCode": userInfo.userCode,
+                            "userName": userInfo.userName,
+                            "useriId": userInfo.userId
+                        }
+
+                        fetch.post('/miniProgramRelated/loginCredentialsCheck', data)
+                        .then(function (res) {
+                            if(res.errcode == 0){
+                                _this.OPENID = res.data[0];
+                                console.log('_this.OPENID',_this.OPENID);
+                            }else{
+                                $Message({
+                                    content: res.errmsg,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                    }
+                }
             });
         },
         // 余额支付
@@ -250,6 +282,49 @@ export default{
                     type: 'error'
                 });
             });
+
+        },
+        // 微信支付
+        wxPay(){
+            let _this = this;
+            let userInfo = wx.getStorageSync('userInfo');
+            let selectFoods = wx.getStorageSync('selectFoods');
+
+            let data = {
+            	"code": 0,
+            	"data": [{
+            		"subject": "**用户购买**商品",
+            		"order_no": _this.prepay_id.billNo,
+            		"pay_type": "wechat_pay",
+            		"amount": _this.prepay_id.paymentAmt,
+            		"client_ip": "127.0.0.1",
+            		"body": "这个商品真的不错哦",
+            		"service_type": "dhb08",
+            		"report_date": "2018-07-10",
+            		"extra": {
+            			"all_pay": {
+            				"trade_type": "JSAPI",
+            				"openid": _this.OPENID.openid
+            			}
+            		}
+            	}],
+            	// "store_id": selectFoods[0].dcId,    //线上用这个测试中心ID
+                "store_id": 0,
+            	"success": false,
+            	"tenancy_id": userInfo.tenancyId,
+            	"type": "GET_PREPAY_BARCODE"
+            }
+            // 先关掉Nginx代理配置的host
+            data = JSON.stringify(data);
+
+            wx.request({
+                url: 'http://test.e7e6.net/payment/news/post',
+                data:data,
+                method:'POST',
+                success:function(res){
+                    console.log(res);
+                }
+            })
 
         }
     },
