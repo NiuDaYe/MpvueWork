@@ -8,12 +8,12 @@ const app = new Vue(Layout)
 app.$mount()
 
 let userInfo = wx.getStorageSync('userInfo');
+
 if(!userInfo){
     wx.reLaunch({
       url: 'pages/login/main'
     })
 }
-
 
 export default {
     // 这个字段走 app.json

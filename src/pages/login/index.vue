@@ -90,9 +90,14 @@ export default{
         }
     },
     async onLoad() {
+        let userInfo = wx.getStorageSync('userInfo');
         await wxp.setNavigationBarTitle({
           title: '登录天子星订货宝'
         })
+        if(userInfo){
+            this.tenancyId = userInfo.tenancyId;
+            this.userName = userInfo.userName;
+        }
     },
 }
 </script>

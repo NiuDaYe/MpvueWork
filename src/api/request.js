@@ -15,7 +15,7 @@ export function submitOrder(data) {
     return fetch.post('/appOrder/submitOrder',data)
 }
 
-//
+// 获取openID
 export function loginCredentialsCheck(data) {
     return fetch.post('/miniProgramRelated/loginCredentialsCheck',data)
 }

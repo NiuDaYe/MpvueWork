@@ -96,7 +96,6 @@ export default{
                   animation.translateY(0).step()
                   that.animationData = animation.export()
                   that.fold = true
-
                 }, 200)
             }
         },
@@ -134,7 +133,6 @@ export default{
         // 总价
         totalPrice(){
             let total = 0;
-            let _this = this;
             this.selectFoods.map((food)=>{
                 if(!food.count){
                     Vue.set(this.selectFoods,'count',0)
@@ -148,12 +146,11 @@ export default{
         // 数量总和
         totalCount(){
             let count = 0;
-            let _this = this;
             this.selectFoods.map((food)=>{
                 if(!food.count){
                     Vue.set(this.selectFoods,'count',0)
                 }else{
-                    count += food.count;
+                    count += Number(food.count);
                 }
             })
             return count;
