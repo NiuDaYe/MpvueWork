@@ -1,40 +1,33 @@
 <template>
   <div class="login">
-
         <i-panel title="基础用法">
             <i-input :value="tenancyId" title="商户名" placeholder="请输入商户名" maxlength=-1 @change="tenancyIdFn"/>
             <i-input :value="userName" type="number" title="用户名" placeholder="请输入用户名" maxlength=-1 @change="userNameFn"/>
             <i-input :value="password" type="password" title="密码" placeholder="请输入密码" maxlength=-1 @change="passwordFn"/>
         </i-panel>
-
         <div class="loginBtn">
-            <i-button @click="login" :loading="buer" type="primary">登录</i-button>
+            <i-button @click="toLogin" type="primary">登录</i-button>
         </div>
-
-      <i-message id="message" />
-
+        <i-message id="message" />
   </div>
 </template>
 
 <script>
 import wxp from 'minapp-api-promise'
-import fetch from '@/utils/fetch'
 import md5 from 'js-md5'
 const { $Message } = require('../../../static/examples/base/index');
+import { login } from '@/api/request'
 
 export default{
     data(){
         return{
-            tenancyId: '',
+            tenancyId: 'maidanglao',
             userName: 'lichangwei',
             password: '',
-            buer:false
         }
     },
     methods:{
-        login(){
-            let _this = this;
-            this.buer = true;
+        toLogin(){
             let data = {
                 "data":[
                     {
@@ -48,34 +41,31 @@ export default{
                 "tenancy_id":"maidanglao"
             }
             data = JSON.stringify(data);
-            fetch.post('/login/appLogin', data)
-            .then(function (res) {
+
+            login(data).then( res =>{
                 if(res.errcode == 0){
                     wx.setStorageSync('userInfo',res.data[0]);
-                    _this.buer = false;
                     $Message({
                         content: '登录成功！',
                         type: 'success'
                     });
-
                     setTimeout(function(){
                         wx.redirectTo({
                           url: '../../pages/index/main'
                         })
                     },2000)
                 }else{
-                    _this.buer = false;
-                    if(_this.tenancyId == ""){
+                    if(this.tenancyId == ""){
                         $Message({
                             content: "请输入商户名",
                             type: 'error'
                         });
-                    }else if(_this.userName == ""){
+                    }else if(this.userName == ""){
                         $Message({
                             content: "请输入用户名",
                             type: 'error'
                         });
-                    }else if(_this.password == ""){
+                    }else if(this.password == ""){
                         $Message({
                             content: "请输入密码",
                             type: 'error'
@@ -86,14 +76,7 @@ export default{
                             type: 'error'
                         });
                     }
-
                 }
-            }).catch(function(){
-                _this.buer = false;
-                $Message({
-                    content: '登录失败！',
-                    type: 'error'
-                });
             })
         },
         tenancyIdFn(event){

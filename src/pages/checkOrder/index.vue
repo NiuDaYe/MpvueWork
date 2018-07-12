@@ -1,7 +1,6 @@
 <!-- 核对订单页面 -->
 <template >
-    <div class="checkOrder" >
-
+    <div class="checkOrder">
         <div class="header">
             <div class="header_adreass">
                 <i-icon class="coordinates_fill" type="coordinates_fill" size="24" color="#989898"/>
@@ -11,7 +10,6 @@
                 </div>
                 <i-icon class="enter" type="enter" size="16"/>
             </div>
-
             <div class="expectData">
                 <span>期望到货日期</span>
                 <view class="section">
@@ -22,12 +20,9 @@
                 <i-icon class="enter" type="enter" size="16"/>
             </div>
         </div>
-
         <scroll-view scroll-y class="cell-list-border" @scrolltolower="lower" :style="'height:'+contentHeight">
-
             <div class="detailsList">
                 <p class="distributionCenter">{{selectFoods[0].dcName}}</p>
-
                 <div class="details" v-for="item in selectFoods" :key="item">
                     <p>
                         <span class="fontOne">{{item.materialName}}({{item.unitName}})</span>
@@ -36,11 +31,8 @@
                     <p> <span>{{item.spec}}</span> <span>*{{item.count}}</span> </p>
                     <p> <span></span>  <span class="fontOne">￥ {{item.individualPrice}} </span> </p>
                 </div>
-
             </div>
-
         </scroll-view>
-
         <div class="checkOrderBottom">
             <div class="price">
                 <p>&nbsp;&nbsp;&nbsp;合计： <span>￥{{totalPrice}}</span> </p>
@@ -49,11 +41,9 @@
             <div class="btn" @click="sub"> 提交订单 </div>
         </div>
         <i-message id="message" />
-
         <i-modal title="支付" :visible="visiblePay" :actions="actionsPay" @click="showPayList">
             <view>请选择支付方式</view>
         </i-modal>
-
     </div>
 </template>
 
@@ -62,6 +52,7 @@ import wxp from 'minapp-api-promise'
 import fetch from '@/utils/fetch'
 import Vue from 'vue';
 const { $Message } = require('../../../static/examples/base/index');
+import { submitOrder,loginCredentialsCheck,balancePayment } from '@/api/request'
 
 export default{
     data(){
@@ -131,7 +122,6 @@ export default{
         },
         // 提交订单
         sub(){
-            let _this = this;
             let userInfo = wx.getStorageSync('userInfo');
             let selectFoods = wx.getStorageSync('selectFoods');
             let data = {
@@ -169,8 +159,7 @@ export default{
             })
             data.data[0].detailDtoList = detailDtoList;
 
-            fetch.post('/appOrder/submitOrder', data)
-            .then(function (res) {
+            submitOrder(data).then(res=>{
                 if(res.errcode == 0){
                     let data = {
                         "id": res.data[0].id,
@@ -186,9 +175,9 @@ export default{
                           url: '../operatingResults/main?pay=1'
                         })
                     }else if(res.data[0].needToPay == true){
-                        _this.prepay_id = res.data[0];          //查看提交订单后返回的数据 唯一订单号  支付时使用
-                        _this.getopenID();                      // 获取openID
-                        _this.visiblePay = true;
+                        this.prepay_id = res.data[0];          //查看提交订单后返回的数据 唯一订单号  支付时使用
+                        this.getopenID();                      // 获取openID
+                        this.visiblePay = true;
                     }
                 }else{
                     $Message({
@@ -197,16 +186,9 @@ export default{
                     });
                 }
             })
-            .catch(function (error) {
-                $Message({
-                    content: "提交订单失败！",
-                    type: 'error'
-                });
-            });
         },
         getopenID(){
             let userInfo = wx.getStorageSync('userInfo');
-            let _this = this;
             wx.login({
                 success: function(res) {
                     if (res.code) {
@@ -220,11 +202,9 @@ export default{
                             "useriId": userInfo.userId
                         }
 
-                        fetch.post('/miniProgramRelated/loginCredentialsCheck', data)
-                        .then(function (res) {
+                        loginCredentialsCheck(data).then(res=>{
                             if(res.errcode == 0){
-                                _this.OPENID = res.data[0];
-                                console.log('_this.OPENID',_this.OPENID);
+                                this.OPENID = res.data[0];
                             }else{
                                 $Message({
                                     content: res.errmsg,
@@ -238,10 +218,8 @@ export default{
         },
         // 余额支付
         balancePay(){
-            let _this = this;
             let userInfo = wx.getStorageSync('userInfo');
             let detailMessage = wx.getStorageSync('detailMessage');
-
             let data = {
                  "tenancy_id": userInfo.tenancyId,
                  "store_id": userInfo.storeId,
@@ -249,44 +227,32 @@ export default{
                  "userName": userInfo.userName,
                  "userCode": userInfo.userCode,
                  "data":[{
-                           "id": detailMessage.id,
+                    "id": detailMessage.id,
                  }]
             }
-
-            fetch.post('/appOrder/balancePayment', data)
-            .then(function (res) {
+            balancePayment(data).then(res=>{
                 if(res.errcode == 0){
-                    _this.visiblePay = false;
+                    this.visiblePay = false;
                     $Message({
                         content: '余额支付成功！',
                         type: 'success'
                     });
-
                     setTimeout(()=>{
                         wx.reLaunch({
                           url: '../operatingResults/main?pay=1'
                         })
                     },1000)
                 }else{
-                    _this.visiblePay = false;
+                    this.visiblePay = false;
                     $Message({
                         content: res.errmsg,
                         type: 'error'
                     });
                 }
             })
-            .catch(function (error) {
-                _this.visiblePay = false;
-                $Message({
-                    content: "余额支付失败！",
-                    type: 'error'
-                });
-            });
-
         },
         // 微信支付
         wxPay(){
-            let _this = this;
             let userInfo = wx.getStorageSync('userInfo');
             let selectFoods = wx.getStorageSync('selectFoods');
 
@@ -294,9 +260,9 @@ export default{
             	"code": 0,
             	"data": [{
             		"subject": "**用户购买**商品",
-            		"order_no": _this.prepay_id.billNo,
+            		"order_no": this.prepay_id.billNo,
             		"pay_type": "wechat_pay",
-            		"amount": _this.prepay_id.paymentAmt,
+            		"amount": this.prepay_id.paymentAmt,
             		"client_ip": "127.0.0.1",
             		"body": "这个商品真的不错哦",
             		"service_type": "dhb08",
@@ -304,7 +270,7 @@ export default{
             		"extra": {
             			"all_pay": {
             				"trade_type": "JSAPI",
-            				"openid": _this.OPENID.openid
+            				"openid": this.OPENID.openid
             			}
             		}
             	}],
@@ -314,7 +280,6 @@ export default{
             	"tenancy_id": userInfo.tenancyId,
             	"type": "GET_PREPAY_BARCODE"
             }
-            // 先关掉Nginx代理配置的host
             data = JSON.stringify(data);
 
             wx.request({

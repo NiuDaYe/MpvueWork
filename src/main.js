@@ -7,35 +7,12 @@ Layout.mpType = 'app'
 const app = new Vue(Layout)
 app.$mount()
 
-// wx.clearStorageSync();
-
-// let user = wx.getStorageSync('user');
-// let userInfo = wx.getStorageSync('userInfo');
-//
-//
-// if(!user){
-//     wx.reLaunch({
-//       url: 'pages/welcome/main'
-//     })
-// }else{
-//     if(!userInfo){
-//         wx.reLaunch({
-//           url: 'pages/login/main'
-//         })
-//     }else{
-//         wx.reLaunch({
-//           url: 'pages/index/main'
-//         })
-//     }
-// }
-
-
 let userInfo = wx.getStorageSync('userInfo');
-    if(!userInfo){
-        wx.reLaunch({
-          url: 'pages/login/main'
-        })
-    }
+if(!userInfo){
+    wx.reLaunch({
+      url: 'pages/login/main'
+    })
+}
 
 
 export default {

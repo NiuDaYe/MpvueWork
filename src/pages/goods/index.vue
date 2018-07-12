@@ -46,10 +46,10 @@
 
 <script>
 import wxp from 'minapp-api-promise'
-import fetch from '@/utils/fetch'
 import cartcontrols from '@/components/cartcontrol/index'
 import shopcart from '@/components/shopcart/index'
 import { LeftMenuFun } from '@/utils/public'
+import { findCategory } from '@/api/request'
 
 export default{
     data(){
@@ -58,18 +58,10 @@ export default{
             searchName:'',
             value:"1",                  // categoryId
             winHeight:null,             // window height
-            category:[                  // 物品类别列表
-                { categoryName: '坚果' },
-                { categoryName: '蔬菜' },
-            ],
-            dcList: [                   // 配送中心列表
-                {
-                    dcId: 1000,
-                    dcName: '美国'
-                },
-            ],
-            list:[],                      // 右侧物品列表
-            selectIndex: 0,         // 点击索引
+            category:[],                // 物品类别列表
+            dcList: [],                 // 配送中心列表
+            list:[],                    // 右侧物品列表
+            selectIndex: 0,             // 点击索引
             toView: '',
         }
     },
@@ -90,7 +82,6 @@ export default{
             }else{
                 this.dcList = info.dcList;
                 let firstId = this.dcList[0].dcId;
-
                 this.findCategoryAndDcMaterial(firstId);
             }
         },
@@ -114,12 +105,9 @@ export default{
                 "pagination": null
             }
             data = JSON.stringify(data);
-
-            fetch.post('/material/findCategoryAndDcMaterial', data)
-            .then(function (res) {
+            findCategory(data).then( res =>{
                 if(res.errcode == 0){
                     _this.list = res.data;        //暂时关闭
-                    // console.log('_this.list',_this.list);
                     wx.showLoading({
                       title: '加载完毕！',
                     })
@@ -131,20 +119,10 @@ export default{
                     wx.showModal({
                       title: '加载失败',
                       content: res.errmsg,
-                      success: function(res) {
-                        if (res.confirm) {}
-                      }
+                      success: function(res) {}
                     })
                 }
             })
-            .catch(function (error) {
-                wx.showLoading({
-                  title: '加载失败!',
-                })
-                setTimeout(function(){
-                  wx.hideLoading()
-                },2000)
-            });
         },
         // 点击查找可用物品 -- > 改成跳转到获取到的商品动画
         clickFindDcMaterialInfo(e){
@@ -158,9 +136,9 @@ export default{
         },
         // 联动左侧效果
         leftmenu(e){
-            var temp = LeftMenuFun(this.list);
-            var len = temp.length
-            var index = 0
+            let temp = LeftMenuFun(this.list);
+            let len = temp.length
+            let index = 0
             for (var i = 0; i < len; i++) {
               if (temp[i] > e.mp.detail.scrollTop) {
                   index =  i;
@@ -185,9 +163,7 @@ export default{
     				}
     			})
     		})
-
     		console.log('arr',arr)
-
         }
     },
     watch:{

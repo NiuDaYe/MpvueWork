@@ -1,3 +1,5 @@
+const { $Message } = require('../../static/examples/base/index');
+
 var Fly=require("flyio/dist/npm/wx")
 var fly=new Fly
 
@@ -24,6 +26,10 @@ fly.interceptors.response.use(
     (err, promise) => {
         //发生网络错误后会走到这里
         //promise.resolve("ssss")
+        $Message({
+            content: '网络错误！',
+            type: 'error'
+        });
     }
 )
 export default fly

@@ -4,13 +4,11 @@
             <i-tab key="tab1" title="物品详情"></i-tab>
             <i-tab key="tab2" title="订单信息"></i-tab>
         </i-tabs>
-
         <div class="times">
             <i-cell-group >
                 <i-cell  title="到货日期" :value="details.inDate"></i-cell>
             </i-cell-group>
         </div>
-
         <scroll-view scroll-y class="cell-list-border" @scrolltolower="lower" :style="'height:'+contentHeight">
             <div class="left" v-if="tabShow">
                 <view>
@@ -27,7 +25,6 @@
                     </div>
                 </view>
             </div>
-
             <div class="right" v-if="!tabShow">
                 <div class="header_adreass">
                     <i-icon class="coordinates_fill" type="coordinates_fill" size="24" color="#989898"/>
@@ -37,7 +34,6 @@
                     </div>
                     <i-icon class="enter" type="enter" size="16"/>
                 </div>
-
                 <dl class="orderMesage">
                     <dt>单据信息</dt>
                     <dd> <span>订单号</span> <span>{{details.billNo}}</span> </dd>
@@ -48,13 +44,11 @@
                 </dl>
             </div>
         </scroll-view>
-
         <div class="checkOrderBottom">
             <div class="price">
                 <p>&nbsp;&nbsp;&nbsp;合计： <span>￥{{totalPrice}}</span> </p>
                 <p>待支付：<span>￥{{totalPrice}}</span> </p>
             </div>
-
             <template v-if="detailMessage.state == 'sourceOrderPay'">
                 <div class="btn" @click="topay">支付</div>
             </template>
@@ -63,18 +57,13 @@
                 <div class="btn" v-if="isReceiv" @click="showReceiving">确认收货</div>
             </template>
         </div>
-
-
         <i-modal title="支付" :visible="visiblePay" :actions="actionsPay" @click="showPayList">
             <view>请选择支付方式</view>
         </i-modal>
-
         <i-modal title="收货确认" :visible="visibleCannot" :actions="actionsCannot" @click="operationReceiving">
             <view>是否确认收货？</view>
         </i-modal>
-
         <i-message id="message" />
-
     </div>
 </template>
 
@@ -82,6 +71,7 @@
 import wxp from 'minapp-api-promise'
 import fetch from '@/utils/fetch'
 const { $Message } = require('../../../static/examples/base/index');
+import { findOrderDetail,confirmReceive,balancePayment } from '@/api/request'
 
 export default{
     data(){
@@ -101,12 +91,8 @@ export default{
             isReceiv:true,                  // 是否收货
             actionsPay: [
                 {
-                    name: '支付宝',
-                    color: '#2d8cf0',
-                },
-                {
                     name: '微信',
-                    color: '#19be6b'
+                    color: '#2d8cf0'
                 },
                 {
                     name: '余额',
@@ -134,11 +120,9 @@ export default{
             }
         },
         getDetailInfo(){
-            let _this = this;
             this.detailMessage = wx.getStorageSync('detailMessage');
             let detailMessage = wx.getStorageSync('detailMessage');
             if(detailMessage.state == "sourceOrderPay"){ detailMessage.state = "sourceOrder"; }
-
             let data = {
                 "tenancy_id": detailMessage.tenancy_id,
                 "store_id": detailMessage.store_id,
@@ -147,24 +131,14 @@ export default{
                        "dataType": detailMessage.state
                  }]
             }
-
             wx.showLoading({title: '加载中...',})
-            fetch.post('/appOrder/findOrderDetail', data)
-            .then(function (res) {
+
+            findOrderDetail(data).then(res=>{
                 if(res.errcode == 0){
-                    // let dealStatus = res.data[0].dealStatus;
-                    // if(dealStatus == "0"){
-                    //     _this.detailMessage.state = "sourceOrderPay";
-                    // }else if(dealStatus == "1"){
-                    //     _this.detailMessage.state = "savedDcOrder";
-                    // }else if(dealStatus == "2"){
-                    //     _this.detailMessage.state = "";
-                    // }
-                    
                     res.data[0].detailList.map((item)=>{
                         item.individualPrice = (Number(item.qty * item.shippingPrice)).toFixed(2);
                     })
-                    _this.details = res.data[0];
+                    this.details = res.data[0];
                     setTimeout(function(){wx.hideLoading()},1000)
                 }else{
                     wx.hideLoading()
@@ -174,13 +148,6 @@ export default{
                     });
                 }
             })
-            .catch(function (error) {
-                wx.hideLoading()
-                $Message({
-                    content: "加载失败",
-                    type: 'error'
-                });
-            });
         },
         showReceiving(){
             this.visibleCannot = true;
@@ -191,10 +158,8 @@ export default{
         showPayList(e){
             const index = e.mp.detail.index;
             if (index === 0) {
-                console.log('调支付宝支付');
-            } else if (index === 1) {
                 console.log('调微信支付');
-            }else if(index === 2){
+            }else if(index === 1){
                 console.log('调余额支付');
                 this.balancePay();
             }
@@ -202,18 +167,16 @@ export default{
         },
         operationReceiving(e){
             const index = e.mp.detail.index;
-            let _this = this;
             if(index === 0){
-                _this.visibleCannot = false;
+                this.visibleCannot = false;
             } else if (index === 1){
-                _this.receiving();  // 调确认收货接口
+                this.receiving();  // 调确认收货接口
             }
         },
         // 确认收货
         receiving(){
             let userInfo = wx.getStorageSync('userInfo');
             let detailMessage = wx.getStorageSync('detailMessage');    //  详情页单个产品信息
-            let _this = this;
             let data = {
                 "tenancy_id": userInfo.tenancyId,
                 "store_id": userInfo.storeId,
@@ -225,37 +188,27 @@ export default{
                 }]
             }
 
-            fetch.post('/appOrder/confirmReceive', data)
-            .then(function (res) {
+            confirmReceive(data).then(res=>{
                 if(res.errcode == 0){
-                    _this.visibleCannot = false;
-                    _this.isReceiv = false;
+                    this.visibleCannot = false;
+                    this.isReceiv = false;
                     $Message({
                         content: '收货成功！',
                         type: 'success'
                     });
                 }else{
-                    _this.visibleCannot = false;
+                    this.visibleCannot = false;
                     $Message({
                         content: res.errmsg,
                         type: 'error'
                     });
                 }
             })
-            .catch(function (error) {
-                _this.visibleCannot = false;
-                $Message({
-                    content: "确认收货失败！",
-                    type: 'error'
-                });
-            });
         },
         // 余额支付
         balancePay(){
-            let _this = this;
             let userInfo = wx.getStorageSync('userInfo');
             let detailMessage = wx.getStorageSync('detailMessage');
-
             let data = {
                  "tenancy_id": userInfo.tenancyId,
                  "store_id": userInfo.storeId,
@@ -267,34 +220,24 @@ export default{
                  }]
             }
 
-            fetch.post('/appOrder/balancePayment', data)
-            .then(function (res) {
+            balancePayment(data).then(res=>{
                 if(res.errcode == 0){
-                    _this.visiblePay = false;
+                    this.visiblePay = false;
                     $Message({
                         content: '余额支付成功！',
                         type: 'success'
                     });
-
                     wx.reLaunch({
                       url: '../operatingResults/main?pay=1'
                     })
                 }else{
-                    _this.visiblePay = false;
+                    this.visiblePay = false;
                     $Message({
                         content: res.errmsg,
                         type: 'error'
                     });
                 }
             })
-            .catch(function (error) {
-                _this.visiblePay = false;
-                $Message({
-                    content: "余额支付失败！",
-                    type: 'error'
-                });
-            });
-
         }
     },
     async onLoad() {

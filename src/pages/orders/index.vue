@@ -93,6 +93,7 @@
 import wxp from 'minapp-api-promise'
 import fetch from '@/utils/fetch'
 const { $Message } = require('../../../static/examples/base/index');
+import { findOrderList,cancelOrder,balancePayment } from '@/api/request'
 
 export default{
     data(){
@@ -107,12 +108,8 @@ export default{
             thisId:"",                      // 点击取消时存的ID
             actionsPay: [
                 {
-                    name: '支付宝',
-                    color: '#2d8cf0',
-                },
-                {
                     name: '微信',
-                    color: '#19be6b'
+                    color: '#2d8cf0'
                 },
                 {
                     name: '余额',
@@ -181,12 +178,10 @@ export default{
                     "pageno":1
                 }
             }
-            fetch.post('/appOrder/findOrderList', data)
-            .then(function (res) {
+
+            findOrderList(data).then(res=>{
                 if(res.errcode == 0){
-
                     _this.orderList = res.data;
-
                 }else{
                     $Message({
                         content: "订单列表获取失败",
@@ -194,12 +189,7 @@ export default{
                     });
                 }
             })
-            .catch(function (error) {
-                $Message({
-                    content: "订单列表获取失败",
-                    type: 'error'
-                });
-            });
+
         },
         cancelOrderEvent(id){
             this.visibleCannot = true;
@@ -207,11 +197,10 @@ export default{
         },
         operationCannot(e){
             const index = e.mp.detail.index;
-            let _this = this;
             if(index === 0){
-                _this.visibleCannot = false;
+                this.visibleCannot = false;
             } else if (index === 1){
-                _this.cancelOrder(_this.thisId);
+                this.cancelOrder(this.thisId);
             }
         },
         topay(id){
@@ -221,10 +210,8 @@ export default{
         showPayList(e){
             const index = e.mp.detail.index;
             if (index === 0) {
-                console.log('调支付宝支付');
-            } else if (index === 1) {
                 console.log('调微信支付');
-            }else if(index === 2){
+            }else if(index === 1){
                 console.log('调余额支付');
                 this.balancePay();
             }
@@ -233,43 +220,33 @@ export default{
         // 取消订单
         cancelOrder(id){
             let userInfo = wx.getStorageSync('userInfo');
-            let _this = this;
             let data = {
                 "tenancy_id":userInfo.tenancyId,
                  "store_id":userInfo.storeId,
                  "data":[{"id":id}]
             }
 
-            fetch.post('/appOrder/cancelOrder', data)
-            .then(function (res) {
+            cancelOrder(data).then(res=>{
                 if(res.errcode == 0){
-                    _this.visibleCannot = false;
-                    _this.orderList.map((item,key)=>{
+                    this.visibleCannot = false;
+                    this.orderList.map((item,key)=>{
                         if(item.id == id){
-                            _this.orderList.splice(key,1);
+                            this.orderList.splice(key,1);
                         }
                     })
-                    _this.visibleCannot = false;
+                    this.visibleCannot = false;
                      $Message({
                          content: '订单取消成功',
                          type: 'success'
                      });
                 }else{
-                    _this.visibleCannot = false;
+                    this.visibleCannot = false;
                     $Message({
                         content: res.errmsg,
                         type: 'error'
                     });
                 }
             })
-            .catch(function (error) {
-                _this.visibleCannot = false;
-                $Message({
-                    content: "取消订单失败！",
-                    type: 'error'
-                });
-            });
-
         },
         toDetail(id,state){
             let userInfo = wx.getStorageSync('userInfo');
@@ -287,10 +264,9 @@ export default{
             })
 
         },
+        // 余额支付
         balancePay(){
-            let _this = this;
             let userInfo = wx.getStorageSync('userInfo');
-
             let data = {
                  "tenancy_id": userInfo.tenancyId,
                  "store_id": userInfo.storeId,
@@ -298,38 +274,28 @@ export default{
                  "userName": userInfo.userName,
                  "userCode": userInfo.userCode,
                  "data":[{
-                           "id": this.thisId,
+                    "id": this.thisId,
                  }]
             }
             data = JSON.stringify(data);
-            fetch.post('/appOrder/balancePayment', data)
-            .then(function (res) {
+            balancePayment(data).then(res=>{
                 if(res.errcode == 0){
-                    _this.visiblePay = false;
+                    this.visiblePay = false;
                     $Message({
                         content: '余额支付成功！',
                         type: 'success'
                     });
-
                     wx.reLaunch({
                       url: '../operatingResults/main?pay=1'
                     })
                 }else{
-                    _this.visiblePay = false;
+                    this.visiblePay = false;
                     $Message({
                         content: res.errmsg,
                         type: 'error'
                     });
                 }
             })
-            .catch(function (error) {
-                _this.visiblePay = false;
-                $Message({
-                    content: "余额支付失败！",
-                    type: 'error'
-                });
-            });
-
         }
     },
     async onLoad() {
@@ -338,7 +304,6 @@ export default{
         await wxp.setNavigationBarTitle({
           title: '订单'
         })
-
         this.getList("sourceOrder","")
     },
     computed: {
