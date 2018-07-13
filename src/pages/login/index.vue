@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-        <i-panel title="基础用法">
+        <i-panel title="">
             <i-input :value="tenancyId" title="商户名" placeholder="请输入商户名" maxlength=-1 @change="tenancyIdFn"/>
             <i-input :value="userName" type="number" title="用户名" placeholder="请输入用户名" maxlength=-1 @change="userNameFn"/>
             <i-input :value="password" type="password" title="密码" placeholder="请输入密码" maxlength=-1 @change="passwordFn"/>

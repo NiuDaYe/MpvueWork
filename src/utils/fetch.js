@@ -1,6 +1,6 @@
 const { $Message } = require('../../static/examples/base/index');
-var Fly=require("flyio/dist/npm/wx")
-var fly=new Fly
+let Fly=require("flyio/dist/npm/wx")
+let fly=new Fly
 
 //配置请求基地址
 fly.config.baseURL = "https://ecsc.meishijia.com/ecsc-mobile-rpc";

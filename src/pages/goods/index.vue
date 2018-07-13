@@ -60,7 +60,602 @@ export default{
             winHeight:null,             // window height
             category:[],                // 物品类别列表
             dcList: [],                 // 配送中心列表
-            list:[],                    // 右侧物品列表
+            list:[                    // 右侧物品列表
+                {
+                "categoryId": 1001,
+                "categoryCode": "011",
+                "categoryName": "蔬菜",
+                "materialList": [
+                    {
+                        "dcId": 4,
+                        "dcCode": "CN0001",
+                        "dcName": "华南配送中心",
+                        "materialId": 19178,
+                        "materialCode": "0700043",
+                        "materialName": "有机蓝莓",
+                        "spec": "盒/12g",
+                        "taxRate": 15,
+                        "stockUnitId": 59,
+                        "stockUnitCode": "8049",
+                        "stockUnitName": "盒",
+                        "unitId": 4,
+                        "unitCode": "4001",
+                        "unitName": "斤",
+                        "conversionValue": 1,
+                        "deliveryMode": "direct",
+                        "shippingPrice": 4,
+                        "isBomgroup": "0",
+                        "clearingType": "purchase_clear",
+                        "clearingTypeName": "采购单位结算",
+                        "lastQty": 0,
+                        "categoryId": 18,
+                        "categoryCode": "07",
+                        "categoryName": "本地果蔬"
+                    },
+                    {
+                        "dcId": 4,
+                        "dcCode": "CN0001",
+                        "dcName": "华南配送中心",
+                        "materialId": 2404,
+                        "materialCode": "800046",
+                        "materialName": "柠檬",
+                        "taxRate": 15,
+                        "stockUnitId": 4,
+                        "stockUnitCode": "4001",
+                        "stockUnitName": "斤",
+                        "unitId": 4,
+                        "unitCode": "4001",
+                        "unitName": "斤",
+                        "conversionValue": 1,
+                        "deliveryMode": "unified",
+                        "shippingPrice": 21,
+                        "isBomgroup": "0",
+                        "clearingType": "purchase_clear",
+                        "clearingTypeName": "采购单位结算",
+                        "lastQty": 0,
+                        "categoryId": 18,
+                        "categoryCode": "07",
+                        "categoryName": "本地果蔬"
+                    },
+                    {
+                        "dcId": 4,
+                        "dcCode": "CN0001",
+                        "dcName": "华南配送中心",
+                        "materialId": 2168,
+                        "materialCode": "900002",
+                        "materialName": "陈皮2",
+                        "spec": "20斤/箱",
+                        "taxRate": 20,
+                        "stockUnitId": 4,
+                        "stockUnitCode": "4001",
+                        "stockUnitName": "斤",
+                        "unitId": 25,
+                        "unitCode": "5002",
+                        "unitName": "两",
+                        "conversionValue": 6.6,
+                        "deliveryMode": "unified",
+                        "shippingPrice": 13.2,
+                        "isBomgroup": "0",
+                        "clearingType": "purchase_clear",
+                        "clearingTypeName": "采购单位结算",
+                        "lastQty": 0,
+                        "categoryId": 18,
+                        "categoryCode": "07",
+                        "categoryName": "本地果蔬"
+                    }
+                ]
+            },
+                {
+                    "categoryId": 1002,
+                    "categoryCode": "022",
+                    "categoryName": "玉米",
+                    "materialList": [
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19178,
+                            "materialCode": "0700043",
+                            "materialName": "有机蓝莓",
+                            "spec": "盒/12g",
+                            "taxRate": 15,
+                            "stockUnitId": 59,
+                            "stockUnitCode": "8049",
+                            "stockUnitName": "盒",
+                            "unitId": 4,
+                            "unitCode": "4001",
+                            "unitName": "斤",
+                            "conversionValue": 1,
+                            "deliveryMode": "direct",
+                            "shippingPrice": 4,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 18,
+                            "categoryCode": "07",
+                            "categoryName": "本地果蔬"
+                        },
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 2404,
+                            "materialCode": "800046",
+                            "materialName": "柠檬",
+                            "taxRate": 15,
+                            "stockUnitId": 4,
+                            "stockUnitCode": "4001",
+                            "stockUnitName": "斤",
+                            "unitId": 4,
+                            "unitCode": "4001",
+                            "unitName": "斤",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 21,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 18,
+                            "categoryCode": "07",
+                            "categoryName": "本地果蔬"
+                        },
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 2168,
+                            "materialCode": "900002",
+                            "materialName": "陈皮2",
+                            "spec": "20斤/箱",
+                            "taxRate": 20,
+                            "stockUnitId": 4,
+                            "stockUnitCode": "4001",
+                            "stockUnitName": "斤",
+                            "unitId": 25,
+                            "unitCode": "5002",
+                            "unitName": "两",
+                            "conversionValue": 6.6,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 13.2,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 18,
+                            "categoryCode": "07",
+                            "categoryName": "本地果蔬"
+                        }
+                    ]
+                },
+                {
+                    "categoryId": 1003,
+                    "categoryCode": "033",
+                    "categoryName": "红薯",
+                    "materialList": [
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19178,
+                            "materialCode": "0700043",
+                            "materialName": "有机蓝莓",
+                            "spec": "盒/12g",
+                            "taxRate": 15,
+                            "stockUnitId": 59,
+                            "stockUnitCode": "8049",
+                            "stockUnitName": "盒",
+                            "unitId": 4,
+                            "unitCode": "4001",
+                            "unitName": "斤",
+                            "conversionValue": 1,
+                            "deliveryMode": "direct",
+                            "shippingPrice": 4,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 18,
+                            "categoryCode": "07",
+                            "categoryName": "本地果蔬"
+                        },
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 2404,
+                            "materialCode": "800046",
+                            "materialName": "柠檬",
+                            "taxRate": 15,
+                            "stockUnitId": 4,
+                            "stockUnitCode": "4001",
+                            "stockUnitName": "斤",
+                            "unitId": 4,
+                            "unitCode": "4001",
+                            "unitName": "斤",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 21,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 18,
+                            "categoryCode": "07",
+                            "categoryName": "本地果蔬"
+                        },
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 2168,
+                            "materialCode": "900002",
+                            "materialName": "陈皮2",
+                            "spec": "20斤/箱",
+                            "taxRate": 20,
+                            "stockUnitId": 4,
+                            "stockUnitCode": "4001",
+                            "stockUnitName": "斤",
+                            "unitId": 25,
+                            "unitCode": "5002",
+                            "unitName": "两",
+                            "conversionValue": 6.6,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 13.2,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 18,
+                            "categoryCode": "07",
+                            "categoryName": "本地果蔬"
+                        }
+                    ]
+                },
+                {
+                    "categoryId": 1004,
+                    "categoryCode": "44",
+                    "categoryName": "面食",
+                    "materialList": [
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19218,
+                            "materialCode": "1400003",
+                            "materialName": "凉面面条",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 6,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        },
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19219,
+                            "materialCode": "1400004",
+                            "materialName": "凉面面酱",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 3,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        }
+                    ]
+                },
+                {
+                    "categoryId": 1005,
+                    "categoryCode": "55",
+                    "categoryName": "西瓜",
+                    "materialList": [
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19218,
+                            "materialCode": "1400003",
+                            "materialName": "凉面面条",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 6,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        },
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19219,
+                            "materialCode": "1400004",
+                            "materialName": "凉面面酱",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 3,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        }
+                    ]
+                },
+                {
+                    "categoryId": 1006,
+                    "categoryCode": "66",
+                    "categoryName": "苦瓜",
+                    "materialList": [
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19218,
+                            "materialCode": "1400003",
+                            "materialName": "凉面面条",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 6,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        },
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19219,
+                            "materialCode": "1400004",
+                            "materialName": "凉面面酱",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 3,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        }
+                    ]
+                },
+                {
+                    "categoryId": 1007,
+                    "categoryCode": "77",
+                    "categoryName": "西红柿",
+                    "materialList": [
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19218,
+                            "materialCode": "1400003",
+                            "materialName": "凉面面条",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 6,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        },
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19219,
+                            "materialCode": "1400004",
+                            "materialName": "凉面面酱",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 3,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        }
+                    ]
+                },
+                {
+                    "categoryId": 1008,
+                    "categoryCode": "88",
+                    "categoryName": "芹菜",
+                    "materialList": [
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19218,
+                            "materialCode": "1400003",
+                            "materialName": "凉面面条",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 6,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        },
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19219,
+                            "materialCode": "1400004",
+                            "materialName": "凉面面酱",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 3,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        }
+                    ]
+                },
+                {
+                    "categoryId": 1009,
+                    "categoryCode": "99",
+                    "categoryName": "西葫芦",
+                    "materialList": [
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19218,
+                            "materialCode": "1400003",
+                            "materialName": "凉面面条",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 6,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        },
+                        {
+                            "dcId": 4,
+                            "dcCode": "CN0001",
+                            "dcName": "华南配送中心",
+                            "materialId": 19219,
+                            "materialCode": "1400004",
+                            "materialName": "凉面面酱",
+                            "taxRate": 15,
+                            "stockUnitId": 3,
+                            "stockUnitCode": "9001",
+                            "stockUnitName": "千克",
+                            "unitId": 3,
+                            "unitCode": "9001",
+                            "unitName": "千克",
+                            "conversionValue": 1,
+                            "deliveryMode": "unified",
+                            "shippingPrice": 3,
+                            "isBomgroup": "0",
+                            "clearingType": "purchase_clear",
+                            "clearingTypeName": "采购单位结算",
+                            "lastQty": 0,
+                            "categoryId": 23,
+                            "categoryCode": "14",
+                            "categoryName": "面食"
+                        }
+                    ]
+                },
+            ],
             selectIndex: 0,             // 点击索引
             toView: '',
         }
@@ -87,7 +682,6 @@ export default{
         },
         // 根据配送中心dcId获取所有的分类和物品
         findCategoryAndDcMaterial(firstId){
-            let _this = this;
             let info = wx.getStorageSync('userInfo');
             let data = {};
             wx.showLoading({
@@ -107,7 +701,7 @@ export default{
             data = JSON.stringify(data);
             findCategory(data).then( res =>{
                 if(res.errcode == 0){
-                    _this.list = res.data;        //暂时关闭
+                    //_this.list = res.data;        //暂时关闭
                     wx.showLoading({
                       title: '加载完毕！',
                     })
@@ -147,7 +741,6 @@ export default{
             }
             if (index!=this.selectIndex) {
                 this.selectIndex = index;
-                //this.toView = 'v'+index;
             }
         },
         // 模糊搜索商品
@@ -174,7 +767,6 @@ export default{
     },
     async onLoad() {
         let info = await wxp.getSystemInfo();
-        let _this = this;
         this.winHeight = info.windowHeight;
         await wxp.setNavigationBarTitle({
           title: '要货'
@@ -209,12 +801,6 @@ export default{
 </script>
 
 <style scoped lang="scss">
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
 .checkActive{
     background: #fff;
     color:#60a2da;
@@ -285,7 +871,6 @@ export default{
             color: #495060;
             font-size: 28rpx;
             text-indent: 1em;
-            // color: red;
         }
         .cell-list{
             .cell-left{

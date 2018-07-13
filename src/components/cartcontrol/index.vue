@@ -1,8 +1,11 @@
 <template>
     <div class="cell-right">
-        <span @click="addCart"> + </span>
+        <span @click="addCart" class="icon-add cart-add"></span>
         <input type="number"  v-show="list.count>0" class="write-number" v-model="list.count" placeholder="0" >
-        <span @click="reduceCart" v-show="list.count>0"> - </span>
+
+        <div class="cart-decrease" :animation='animationData' v-show="list.count>0" @click.stop.prevent="reduceCart">
+            <span class="inner icon-remove"></span>
+        </div>
 
     </div>
 </template>
@@ -16,11 +19,24 @@
                 type:Object
             }
         },
+        data(){
+            return {
+                animationData: {}
+            }
+        },
         methods:{
             addCart(){
                 if(!this.list.count){
                     Vue.set(this.list,'count',1);
                     this.box = true;
+                    let animation  = wx.createAnimation({duration:100,timingFunction:'linear'})
+                    this.animation = animation
+                    animation.opacity(0).step()
+                    this.animationData = animation.export(),
+                    setTimeout(()=>{
+                        animation.opacity(1).step()
+                        this.animationData = animation.export()
+                    },200)
                 }else{
                     this.list.count ++;
                 }
@@ -51,7 +67,7 @@
         line-height: 60rpx;
         width: 80rpx;
     }
-    span{
+    .cart-add,.cart-decrease{
         width: 30px;
         height: 30px;
         line-height: 26px;
@@ -61,13 +77,25 @@
         font-size: 44rpx;
         font-weight: bold;
     }
-    span:nth-child(3){
-        color: #1e84ec;
-    }
-    span:nth-child(1){
+    .cart-add{
         color: #fff;
         background: #1e84ec;
         border:none;
     }
+    .cart-decrease{
+        opacity: 1;
+        color: #1e84ec;
+        .inner{
+            line-height: 24px;
+            font-size: 24px;
+
+        }
+    }
+}
+.icon-remove:before{
+    content: "-"
+}
+.icon-add:before{
+    content: "+"
 }
 </style>

@@ -23,7 +23,7 @@
         </div>
 
         <transition name="fade">
-            <div class="maskLayer" v-if="listShow" @click="hideCart"></div>
+            <div class="maskLayer" v-if="listShow" :animation='animationBg' @click="hideCart"></div>
         </transition>
 
         <transition name="fold">
@@ -63,7 +63,8 @@ export default{
     data(){
         return {
             fold:true,
-            animationData:{}
+            animationData:{},
+            animationBg:{}
         }
     },
     components:{
@@ -80,9 +81,20 @@ export default{
                 duration:300,
                 timingFunction:'ease'
              })
+
+             let animationBg  = wx.createAnimation({
+                 duration:300,
+                 timingFunction:'ease'
+              })
+
              that.animation = animation
-             animation.translateY(220).step()
+             animation.translateY(320).step()
              that.animationData = animation.export()
+
+             that.animationBg = animationBg
+             animationBg.opacity(0).step()
+             that.animationBg = animationBg.export()
+
 
             if(this.fold == true){
                 that.fold = false;
@@ -91,12 +103,22 @@ export default{
                   that.animationData = animation.export()
                 }, 200)
 
+                setTimeout(function () {
+                  animationBg.opacity(1).step()
+                  that.animationBg = animationBg.export()
+                }, 200)
+
             }else if(this.fold == false){
                 setTimeout(function () {
                   animation.translateY(0).step()
                   that.animationData = animation.export()
                   that.fold = true
                 }, 200)
+                setTimeout(function () {
+                  animationBg.opacity(0).step()
+                  that.animationBg = animationBg.export()
+                }, 200)
+
             }
         },
         // 点阴影隐藏购物车
@@ -106,14 +128,31 @@ export default{
               duration:300,
               timingFunction:'linear'
             })
+
+            let animationBg  = wx.createAnimation({
+                duration:300,
+                timingFunction:'ease'
+             })
+
             that.animation = animation
             animation.translateY(220).step()
             that.animationData = animation.export()
+
+            that.animationBg = animationBg
+            animationBg.opacity(0).step()
+            that.animationBg = animationBg.export()
+
             setTimeout(function () {
               animation.translateY(0).step()
               that.animationData = animation.export()
               that.fold = true;
             }, 200)
+
+            setTimeout(function () {
+              animationBg.opacity(0).step()
+              that.animationBg = animationBg.export()
+            }, 200)
+
         },
         // 清空购物车
         empty() {
