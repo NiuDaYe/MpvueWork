@@ -105,7 +105,6 @@ export default{
         this.information.address = userInfo.address;
         this.information.linkman = userInfo.linkman;
         this.information.phone = userInfo.phone;
-
     },
     methods:{
         bindDateChange: function(e) {
@@ -188,6 +187,7 @@ export default{
             })
         },
         getopenID(){
+            let _this = this;
             let userInfo = wx.getStorageSync('userInfo');
             wx.login({
                 success: function(res) {
@@ -204,7 +204,7 @@ export default{
 
                         loginCredentialsCheck(data).then(res=>{
                             if(res.errcode == 0){
-                                this.OPENID = res.data[0];
+                                _this.OPENID = res.data[0];
                             }else{
                                 $Message({
                                     content: res.errmsg,
@@ -253,9 +253,9 @@ export default{
         },
         // 微信支付
         wxPay(){
+            let _this = this;
             let userInfo = wx.getStorageSync('userInfo');
             let selectFoods = wx.getStorageSync('selectFoods');
-
             let data = {
             	"code": 0,
             	"data": [{
@@ -266,11 +266,11 @@ export default{
             		"client_ip": "127.0.0.1",
             		"body": "这个商品真的不错哦",
             		"service_type": "dhb08",
-            		"report_date": "2018-07-10",
+            		"report_date": "2018-07-16",
             		"extra": {
             			"all_pay": {
+                            "openid": _this.OPENID.openid,
             				"trade_type": "JSAPI",
-            				"openid": this.OPENID.openid
             			}
             		}
             	}],
@@ -280,7 +280,6 @@ export default{
             	"tenancy_id": userInfo.tenancyId,
             	"type": "GET_PREPAY_BARCODE"
             }
-            data = JSON.stringify(data);
 
             wx.request({
                 url: 'http://test.e7e6.net/payment/news/post',

@@ -77,82 +77,11 @@ export default{
             if (!that.totalCount){
                 return;
             }
-            let animation  = wx.createAnimation({
-                duration:300,
-                timingFunction:'ease'
-             })
-
-             let animationBg  = wx.createAnimation({
-                 duration:300,
-                 timingFunction:'ease'
-              })
-
-             that.animation = animation
-             animation.translateY(320).step()
-             that.animationData = animation.export()
-
-             that.animationBg = animationBg
-             animationBg.opacity(0).step()
-             that.animationBg = animationBg.export()
-
-
-            if(this.fold == true){
-                that.fold = false;
-                setTimeout(function () {
-                  animation.translateY(0).step()
-                  that.animationData = animation.export()
-                }, 200)
-
-                setTimeout(function () {
-                  animationBg.opacity(1).step()
-                  that.animationBg = animationBg.export()
-                }, 200)
-
-            }else if(this.fold == false){
-                setTimeout(function () {
-                  animation.translateY(0).step()
-                  that.animationData = animation.export()
-                  that.fold = true
-                }, 200)
-                setTimeout(function () {
-                  animationBg.opacity(0).step()
-                  that.animationBg = animationBg.export()
-                }, 200)
-
-            }
+            this.animations();
         },
         // 点阴影隐藏购物车
         hideCart(){
-            let that = this;
-            let animation = wx.createAnimation({
-              duration:300,
-              timingFunction:'linear'
-            })
-
-            let animationBg  = wx.createAnimation({
-                duration:300,
-                timingFunction:'ease'
-             })
-
-            that.animation = animation
-            animation.translateY(220).step()
-            that.animationData = animation.export()
-
-            that.animationBg = animationBg
-            animationBg.opacity(0).step()
-            that.animationBg = animationBg.export()
-
-            setTimeout(function () {
-              animation.translateY(0).step()
-              that.animationData = animation.export()
-              that.fold = true;
-            }, 200)
-
-            setTimeout(function () {
-              animationBg.opacity(0).step()
-              that.animationBg = animationBg.export()
-            }, 200)
-
+            this.animations()
         },
         // 清空购物车
         empty() {
@@ -166,6 +95,50 @@ export default{
             wx.navigateTo({
               url: '../../pages/checkOrder/main'
             })
+        },
+        animations(){
+           let that = this;
+           let animation  = wx.createAnimation({
+               duration:300,
+               timingFunction:'ease'
+            })
+
+            let animationBg  = wx.createAnimation({
+                duration:300,
+                timingFunction:'ease'
+             })
+
+            that.animation = animation
+            animation.translateY(320).step()
+            that.animationData = animation.export()
+
+            that.animationBg = animationBg
+            animationBg.opacity(0).step()
+            that.animationBg = animationBg.export()
+
+           if(this.fold == true){
+               that.fold = false;
+               setTimeout(function () {
+                 animation.translateY(0).step()
+                 that.animationData = animation.export()
+               }, 200)
+
+               setTimeout(function () {
+                 animationBg.opacity(1).step()
+                 that.animationBg = animationBg.export()
+               }, 200)
+
+           }else if(this.fold == false){
+               setTimeout(function () {
+                 animation.translateY(0).step()
+                 that.animationData = animation.export()
+                 that.fold = true
+               }, 200)
+               setTimeout(function () {
+                 animationBg.opacity(0).step()
+                 that.animationBg = animationBg.export()
+               }, 200)
+           }
        }
     },
     computed:{

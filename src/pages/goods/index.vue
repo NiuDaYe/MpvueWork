@@ -60,91 +60,7 @@ export default{
             winHeight:null,             // window height
             category:[],                // 物品类别列表
             dcList: [],                 // 配送中心列表
-            list:[                    // 右侧物品列表
-                {
-                "categoryId": 1001,
-                "categoryCode": "011",
-                "categoryName": "蔬菜",
-                "materialList": [
-                    {
-                        "dcId": 4,
-                        "dcCode": "CN0001",
-                        "dcName": "华南配送中心",
-                        "materialId": 19178,
-                        "materialCode": "0700043",
-                        "materialName": "有机蓝莓",
-                        "spec": "盒/12g",
-                        "taxRate": 15,
-                        "stockUnitId": 59,
-                        "stockUnitCode": "8049",
-                        "stockUnitName": "盒",
-                        "unitId": 4,
-                        "unitCode": "4001",
-                        "unitName": "斤",
-                        "conversionValue": 1,
-                        "deliveryMode": "direct",
-                        "shippingPrice": 4,
-                        "isBomgroup": "0",
-                        "clearingType": "purchase_clear",
-                        "clearingTypeName": "采购单位结算",
-                        "lastQty": 0,
-                        "categoryId": 18,
-                        "categoryCode": "07",
-                        "categoryName": "本地果蔬"
-                    },
-                    {
-                        "dcId": 4,
-                        "dcCode": "CN0001",
-                        "dcName": "华南配送中心",
-                        "materialId": 2404,
-                        "materialCode": "800046",
-                        "materialName": "柠檬",
-                        "taxRate": 15,
-                        "stockUnitId": 4,
-                        "stockUnitCode": "4001",
-                        "stockUnitName": "斤",
-                        "unitId": 4,
-                        "unitCode": "4001",
-                        "unitName": "斤",
-                        "conversionValue": 1,
-                        "deliveryMode": "unified",
-                        "shippingPrice": 21,
-                        "isBomgroup": "0",
-                        "clearingType": "purchase_clear",
-                        "clearingTypeName": "采购单位结算",
-                        "lastQty": 0,
-                        "categoryId": 18,
-                        "categoryCode": "07",
-                        "categoryName": "本地果蔬"
-                    },
-                    {
-                        "dcId": 4,
-                        "dcCode": "CN0001",
-                        "dcName": "华南配送中心",
-                        "materialId": 2168,
-                        "materialCode": "900002",
-                        "materialName": "陈皮2",
-                        "spec": "20斤/箱",
-                        "taxRate": 20,
-                        "stockUnitId": 4,
-                        "stockUnitCode": "4001",
-                        "stockUnitName": "斤",
-                        "unitId": 25,
-                        "unitCode": "5002",
-                        "unitName": "两",
-                        "conversionValue": 6.6,
-                        "deliveryMode": "unified",
-                        "shippingPrice": 13.2,
-                        "isBomgroup": "0",
-                        "clearingType": "purchase_clear",
-                        "clearingTypeName": "采购单位结算",
-                        "lastQty": 0,
-                        "categoryId": 18,
-                        "categoryCode": "07",
-                        "categoryName": "本地果蔬"
-                    }
-                ]
-            },
+            list:[                      // 右侧物品列表
                 {
                     "categoryId": 1002,
                     "categoryCode": "022",
@@ -656,7 +572,7 @@ export default{
                     ]
                 },
             ],
-            selectIndex: 0,             // 点击索引
+            selectIndex: 0,              // 点击索引
             toView: '',
         }
     },
@@ -694,14 +610,14 @@ export default{
                 "userCode": info.userCode,
                 "userName": info.userName,
                 "data": [{
-                        "dcId": firstId
-                     }],
+                    "dcId": firstId
+                 }],
                 "pagination": null
             }
             data = JSON.stringify(data);
             findCategory(data).then( res =>{
                 if(res.errcode == 0){
-                    //_this.list = res.data;        //暂时关闭
+                    //this.list = res.data;        //暂时关闭
                     wx.showLoading({
                       title: '加载完毕！',
                     })
