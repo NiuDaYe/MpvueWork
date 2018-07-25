@@ -13,52 +13,58 @@
 
         <scroll-view scroll-y class="cell-list-border" @scrolltolower="lower" :style="'height:'+contentHeight">
             <div class="orderList">
-                <view class="list" v-for="item in orderList" :key="item">
-                    <p class="times">{{item.orderDate}}</p>
-                    <div class="content">
-                        <p class="payState" @click=toDetail(item.id,state)>
-                            <span>{{item.billNo}}</span>
-                            <span class="pubColor">
-                                <template v-if="state == 'sourceOrderPay'">待支付</template>
-                                <template v-else-if="state == 'deliveryOrder'">待发货</template>
-                                <template v-else-if="state == 'savedDcOrder'">待收货</template>
+                <template v-if="orderList.length != 0">
+                    <view class="list" v-for="item in orderList" :key="item">
+                        <p class="times">{{item.orderDate}}</p>
+                        <div class="content">
+                            <p class="payState" @click=toDetail(item.id,state)>
+                                <span>{{item.billNo}}</span>
+                                <span class="pubColor">
+                                    <template v-if="state == 'sourceOrderPay'">待支付</template>
+                                    <template v-else-if="state == 'deliveryOrder'">待发货</template>
+                                    <template v-else-if="state == 'savedDcOrder'">待收货</template>
+                                    <template v-else-if="state == 'auditedDcOrder'">
+                                        <template v-if="item.receiveStatus == receive_status_finish"> 收货完成 </template>
+                                        <template v-else-if="item.receiveStatus == return_auditing"> 退货审核中 </template>
+                                        <template v-else-if="item.receiveStatus == returned_reimburse"> 退货退款 </template>
+                                        <template v-else-if="item.receiveStatus == reimburse"> 仅退款 </template>
+                                        <template v-else-if="item.receiveStatus == exchange_goods"> 换货 </template>
+                                        <template v-else-if="item.receiveStatus == turn_down"> 驳回 </template>
+                                    </template>
+                                </span>
+                            </p>
+                            <p class="abstract">物品摘要：{{item.materialInfo}}</p>
+                            <div class="money">
+                                <p>订单金额:<span class="pubColor">￥{{item.totalAmt}}</span> </p>
+                                <template v-if="state == 'sourceOrder'">
+                                    <span class="pubClass" @click=onceMore(item.id,state)>再来一单</span>
+                                    <span class="pubClass" @click=toDetail(item.id,state)>查看源单</span>
+                                </template>
+                                <template v-else-if="state == 'sourceOrderPay'">
+                                    <span class="pubClass" @click="cancelOrderEvent(item.id)">取消订单</span>
+                                    <span class="pubClass" @click=topay(item.id)>支付</span>
+                                </template>
+                                <template v-else-if="state == 'deliveryOrder'">
+                                    <span class="pubClass" @click=toDetail(item.id,state)>查看源单</span>
+                                </template>
+                                <template v-else-if="state == 'savedDcOrder'">
+                                    <span class="pubClass" @click=toDetail(item.id,state)>去收货</span>
+                                </template>
                                 <template v-else-if="state == 'auditedDcOrder'">
-                                    <template v-if="item.receiveStatus == receive_status_finish"> 收货完成 </template>
-                                    <template v-else-if="item.receiveStatus == return_auditing"> 退货审核中 </template>
-                                    <template v-else-if="item.receiveStatus == returned_reimburse"> 退货退款 </template>
-                                    <template v-else-if="item.receiveStatus == reimburse"> 仅退款 </template>
-                                    <template v-else-if="item.receiveStatus == exchange_goods"> 换货 </template>
-                                    <template v-else-if="item.receiveStatus == turn_down"> 驳回 </template>
+                                    <template v-if="receiveStatus == receive_status_finish">
+                                        <span class="pubClass" @click=toDetail(item.id,state)>售后</span>
+                                    </template>
+                                    <template v-else>
+                                        <span class="pubClass dish" @click=toDetail(item.id,state)>售后</span>
+                                    </template>
                                 </template>
-                            </span>
-                        </p>
-                        <p class="abstract">物品摘要：{{item.materialInfo}}</p>
-                        <div class="money">
-                            <p>订单金额:<span class="pubColor">￥{{item.totalAmt}}</span> </p>
-                            <template v-if="state == 'sourceOrder'">
-                                <span class="pubClass" @click=toDetail(item.id,state)>查看源单</span>
-                            </template>
-                            <template v-else-if="state == 'sourceOrderPay'">
-                                <span @click="cancelOrderEvent(item.id)">取消订单</span>
-                                <span class="pubClass" @click=topay(item.id)>支付</span>
-                            </template>
-                            <template v-else-if="state == 'deliveryOrder'">
-                                <span class="pubClass" @click=toDetail(item.id,state)>查看源单</span>
-                            </template>
-                            <template v-else-if="state == 'savedDcOrder'">
-                                <span class="pubClass" @click=toDetail(item.id,state)>去收货</span>
-                            </template>
-                            <template v-else-if="state == 'auditedDcOrder'">
-                                <template v-if="receiveStatus == receive_status_finish">
-                                    <span class="pubClass" @click=toDetail(item.id,state)>售后</span>
-                                </template>
-                                <template v-else>
-                                    <span class="pubClass dish" @click=toDetail(item.id,state)>售后</span>
-                                </template>
-                            </template>
+                            </div>
                         </div>
-                    </div>
-                </view>
+                    </view>
+                </template>
+                <template v-else>
+                    <p class="noOrder">暂无订单</p>
+                </template>
 
             </div>
         </scroll-view>
@@ -93,7 +99,7 @@
 import wxp from 'minapp-api-promise'
 import fetch from '@/utils/fetch'
 const { $Message } = require('../../../static/examples/base/index');
-import { findOrderList,cancelOrder,balancePayment } from '@/api/request'
+import { findOrderList,cancelOrder,balancePayment,oneMore } from '@/api/request'
 
 export default{
     data(){
@@ -107,10 +113,10 @@ export default{
             visibleCannot:false,            // 取消订单弹窗
             thisId:"",                      // 点击取消时存的ID
             actionsPay: [
-                {
-                    name: '微信',
-                    color: '#2d8cf0'
-                },
+                // {
+                //     name: '微信',
+                //     color: '#2d8cf0'
+                // },
                 {
                     name: '余额',
                     color: '#19be6b'
@@ -179,8 +185,12 @@ export default{
                 }
             }
 
+            wx.showLoading({
+              title: '数据加载中...',
+            })
             findOrderList(data).then(res=>{
                 if(res.errcode == 0){
+                    wx.hideLoading()
                     _this.orderList = res.data;
                 }else{
                     $Message({
@@ -210,7 +220,8 @@ export default{
         showPayList(e){
             const index = e.mp.detail.index;
             if (index === 0) {
-                console.log('调微信支付');
+                // console.log('调微信支付');
+                this.balancePay();
             }else if(index === 1){
                 console.log('调余额支付');
                 this.balancePay();
@@ -247,6 +258,37 @@ export default{
                     });
                 }
             })
+        },
+        // 再来一单
+        onceMore(id,state){
+            let userInfo = wx.getStorageSync('userInfo');
+            let data = {
+                "tenancy_id": userInfo.tenancyId,
+                "store_id": userInfo.storeId,
+                "data":[{
+                    "id": id,
+                    "dataType": state,
+                }]
+            }
+            wx.showLoading({
+              title: '加载中',
+            })
+            oneMore(data).then(res=>{
+                if(res.errcode == 0){
+                    wx.hideLoading();
+                    wx.setStorageSync('selectFoods',res.data);
+                    wx.navigateTo({
+                      url: '../checkOrder/main'
+                    })
+                }else{
+                    $Message({
+                        content: "订单列表获取失败",
+                        type: 'error'
+                    });
+                }
+            })
+
+
         },
         toDetail(id,state){
             let userInfo = wx.getStorageSync('userInfo');
@@ -373,6 +415,12 @@ export default{
                     }
                 }
             }
+        }
+        .noOrder{
+            line-height: 600rpx;
+            text-align: center;
+            background: #fff;
+            color: #666666;
         }
     }
 }

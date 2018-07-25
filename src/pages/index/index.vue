@@ -19,7 +19,7 @@
                     </i-grid-item>
                 </a>
             </i-grid>
-            <i-grid class="pubColor">
+            <!-- <i-grid class="pubColor">
                 <i-grid-item>
                     <i-grid-icon>
                         <i-icon size="30" type="tasklist_fill" />
@@ -28,14 +28,17 @@
                 </i-grid-item>
                 <i-grid-item>
                     <i-grid-icon>
-                        <i-icon size="30" type="picture_fill" />
+                        <i-icon size="30" type="picture" />
                     </i-grid-icon>
                     <i-grid-label>报表</i-grid-label>
                 </i-grid-item>
-            </i-grid>
+            </i-grid> -->
         </div>
 
-        <i-button @click="exit" class="pubColor">退出</i-button>
+        <i-button @click="handleOpen" class="pubColor">退出</i-button>
+        <i-modal :visible="visibles" @ok="exit" @cancel="handleClose">
+            <view>确定退出登录？</view>
+        </i-modal>
 
   </div>
 </template>
@@ -46,17 +49,25 @@ import wxp from 'minapp-api-promise'
 export default {
   data () {
     return {
-      winHeight:null
+      winHeight:null,
+      visibles:false
     }
   },
   methods: {
+      handleOpen(){
+          this.visibles = true;
+      },
       exit(){
           wx.removeStorageSync('userInfo');
+          this.visibles = false;
           setTimeout(function(){
               wx.redirectTo({
                 url: '../../pages/login/main'
               })
-          })
+          },1000)
+      },
+      handleClose(){
+          this.visibles = false;
       }
   },
   computed: {

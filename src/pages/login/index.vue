@@ -2,7 +2,7 @@
   <div class="login">
         <i-panel title="">
             <i-input :value="tenancyId" title="商户名" placeholder="请输入商户名" maxlength=-1 @change="tenancyIdFn"/>
-            <i-input :value="userName" type="number" title="用户名" placeholder="请输入用户名" maxlength=-1 @change="userNameFn"/>
+            <i-input :value="userName" title="用户名" placeholder="请输入用户名" maxlength=-1 @change="userNameFn"/>
             <i-input :value="password" type="password" title="密码" placeholder="请输入密码" maxlength=-1 @change="passwordFn"/>
         </i-panel>
         <div class="loginBtn">
@@ -18,11 +18,19 @@ import md5 from 'js-md5'
 const { $Message } = require('../../../static/examples/base/index');
 import { login } from '@/api/request'
 
+// tenancyId: 'maidanglao',
+// userName: 'lichangwei',
+// password: '123456',
+
+// 商户号: maidanglao
+// 用户名: lichangwei
+// 密码: 123456
+
 export default{
     data(){
         return{
-            tenancyId: 'maidanglao',
-            userName: 'lichangwei',
+            tenancyId: '',
+            userName: '',
             password: '',
         }
     },
@@ -41,19 +49,19 @@ export default{
                 "tenancy_id":"maidanglao"
             }
             data = JSON.stringify(data);
+            wx.showLoading({
+              title: '加载中',
+            })
 
             login(data).then( res =>{
                 if(res.errcode == 0){
                     wx.setStorageSync('userInfo',res.data[0]);
-                    $Message({
-                        content: '登录成功！',
-                        type: 'success'
-                    });
+                    wx.hideLoading();
                     setTimeout(function(){
                         wx.redirectTo({
                           url: '../../pages/index/main'
                         })
-                    },2000)
+                    },600)
                 }else{
                     if(this.tenancyId == ""){
                         $Message({

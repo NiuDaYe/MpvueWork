@@ -44,3 +44,8 @@ export function findOrderDetail(data) {
 export function confirmReceive(data) {
     return fetch.post('/appOrder/confirmReceive',data)
 }
+
+// 再来一单
+export function oneMore(data) {
+    return fetch.post('/appOrder/oneMore',data)
+}

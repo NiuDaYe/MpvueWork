@@ -3,12 +3,15 @@ let Fly=require("flyio/dist/npm/wx")
 let fly=new Fly
 
 //配置请求基地址
-fly.config.baseURL = "https://ecsc.meishijia.com/ecsc-mobile-rpc";
-// fly.config.baseURL = "https://ecsc.e7e6.net/ecsc-extension-rpc"; //正式环境
+fly.config.baseURL = "https://ecsc.meishijia.com/ecsc-mobile-rpc";  //测试环境
+// fly.config.baseURL = "https://ecsc.e7e6.net/ecsc-mobile-rpc"; //正式环境
+
+// http://test.e7e6.net
+
 
 fly.config.timeout=5000;
 
-// //添加请求拦截器
+//添加请求拦截器
 fly.interceptors.request.use((config, promise) => {
     config.headers["content-type"] = "application/json";
     return config;

@@ -92,6 +92,7 @@ export default{
         // 去下单
         toPAY(){
             let selectFoods = wx.setStorageSync('selectFoods',this.selectFoods);
+            this.$emit('ievent','');
             wx.navigateTo({
               url: '../../pages/checkOrder/main'
             })

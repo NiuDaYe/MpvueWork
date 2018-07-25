@@ -68,10 +68,10 @@ export default{
             },
             visiblePay:false,               // 支付列表
             actionsPay: [
-                {
-                    name: '微信',
-                    color: '#2d8cf0'
-                },
+                // {
+                //     name: '微信',
+                //     color: '#2d8cf0'
+                // },
                 {
                     name: '余额',
                     color: '#19be6b'
@@ -95,9 +95,11 @@ export default{
           title: '核对订单'
         })
         selectFoods.map((item)=>{
+            if(item.qty){
+                item.count = item.qty;
+            }
             item.individualPrice = (Number(item.count * item.shippingPrice)).toFixed(2);
         })
-
         this.selectFoods = selectFoods;
         this.winHeight = info.windowHeight;
         this.date = myDate.getFullYear() + "-" + myDate.getMonth() + "-" + myDate.getDate();
@@ -113,7 +115,8 @@ export default{
         showPayList(e){
             const index = e.mp.detail.index;
             if (index === 0) {
-                this.wxPay();
+                // this.wxPay();
+                this.balancePay();
             }else if(index === 1){
                 this.balancePay();
             }
@@ -253,6 +256,7 @@ export default{
         },
         // 微信支付
         wxPay(){
+
             let _this = this;
             let userInfo = wx.getStorageSync('userInfo');
             let selectFoods = wx.getStorageSync('selectFoods');
@@ -282,7 +286,7 @@ export default{
             }
 
             wx.request({
-                url: 'http://test.e7e6.net/payment/news/post',
+                 url: 'https://test.e7e6.net/payment/news/post',
                 data:data,
                 method:'POST',
                 success:function(res){
