@@ -66,6 +66,10 @@
                     <p class="noOrder">暂无订单</p>
                 </template>
 
+                <div class="bottomLine" v-show="bottomLine">
+                    <span>我是有底线的</span>
+                </div>
+
             </div>
         </scroll-view>
 
@@ -113,10 +117,10 @@ export default{
             visibleCannot:false,            // 取消订单弹窗
             thisId:"",                      // 点击取消时存的ID
             actionsPay: [
-                // {
-                //     name: '微信',
-                //     color: '#2d8cf0'
-                // },
+                {
+                    name: '微信',
+                    color: '#2d8cf0'
+                },
                 {
                     name: '余额',
                     color: '#19be6b'
@@ -130,20 +134,24 @@ export default{
                     name: '确定',
                     color: '#ed3f14'
                 }
-            ]
+            ],
+            pagesize:500,
+            pageno:1,
+            bottomLine:false
         }
     },
     methods:{
         handleChangeTab (detail) {
             this.currentTab = detail.mp.detail.key;
-
+            this.pageno = 1;
+            this.bottomLine = false;
             if(this.currentTab == "tab1"){              // 源订单
                 this.getList("sourceOrder","");
                 this.state = "sourceOrder";
             }else if(this.currentTab == "tab2"){        // 待支付
                 this.getList("sourceOrder","0");
                 this.state = "sourceOrderPay";
-            }else if(this.currentTab == "tab3"){        // 代发货
+            }else if(this.currentTab == "tab3"){        // 待发货
                 this.getList("deliveryOrder","");
                 this.state = "deliveryOrder";
             }else if(this.currentTab == "tab4"){        // 待收货
@@ -180,25 +188,36 @@ export default{
                     }
                 ],
                 "pagination":{
-                    "pagesize":1000,
-                    "pageno":1
+                    "pagesize": this.pagesize,
+                    "pageno": this.pageno
                 }
             }
+            if(_this.bottomLine == false){
+                wx.showLoading({
+                  title: '数据加载中...',
+                })
+                findOrderList(data).then(res=>{
+                    if(res.errcode == 0){
+                        wx.hideLoading()
+                        _this.orderList = res.data;
 
-            wx.showLoading({
-              title: '数据加载中...',
-            })
-            findOrderList(data).then(res=>{
-                if(res.errcode == 0){
-                    wx.hideLoading()
-                    _this.orderList = res.data;
-                }else{
-                    $Message({
-                        content: "订单列表获取失败",
-                        type: 'error'
-                    });
-                }
-            })
+                        // if(res.data.length != 0){
+                        //     _this.orderList = _this.orderList.concat(res.data); // 为空的时候没有清空
+                        //     console.log('_this.orderList',_this.orderList)
+                        // }else{
+                        //     _this.bottomLine = true;
+                        //     console.log('meiyoushuju');
+                        //     _this.orderList=[];
+                        // }
+
+                    }else{
+                        $Message({
+                            content: "订单列表获取失败",
+                            type: 'error'
+                        });
+                    }
+                })
+            }
 
         },
         cancelOrderEvent(id){
@@ -220,8 +239,8 @@ export default{
         showPayList(e){
             const index = e.mp.detail.index;
             if (index === 0) {
-                // console.log('调微信支付');
-                this.balancePay();
+                console.log('调微信支付');
+                this.wxPay();
             }else if(index === 1){
                 console.log('调余额支付');
                 this.balancePay();
@@ -338,6 +357,32 @@ export default{
                     });
                 }
             })
+        },
+        // 微信支付
+        wxPay(){
+
+        },
+        // 分页
+        lower(){
+            // let state = this.state;
+            // this.pageno += 1;
+            //
+            // if(state == "sourceOrder"){
+            //     // console.log('源单');
+            //     this.getList("sourceOrder","");
+            // }else if(state == "sourceOrderPay"){
+            //     // console.log('待支付-多传个0');
+            //     this.getList("sourceOrder","0");
+            // }else if(state == "deliveryOrder"){
+            //     // console.log('代发货');
+            //     this.getList("deliveryOrder","");
+            // }else if(state == "savedDcOrder"){
+            //     // console.log('待收货');
+            //     this.getList("savedDcOrder","");
+            // }else if(state == 'auditedDcOrder'){
+            //     // console.log('已完成');
+            //     this.getList("auditedDcOrder","");
+            // }
         }
     },
     async onLoad() {
@@ -421,6 +466,19 @@ export default{
             text-align: center;
             background: #fff;
             color: #666666;
+        }
+    }
+    .bottomLine{
+        width: 100%;
+        height: 1px;
+        position: relative;
+        border: 1px solid #ccc;
+        color: #ccc;
+        font-size: 14px;
+        background: #fff;
+        span{
+            position:absolute;
+            left:50%;
         }
     }
 }

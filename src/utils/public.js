@@ -12,10 +12,27 @@ export function formatTime (date) {
   const minute = date.getMinutes()
   const second = date.getSeconds()
 
-  const t1 = [year, month, day].map(formatNumber).join('/')
+  const t1 = [year, month, day].map(formatNumber).join('-')
   const t2 = [hour, minute, second].map(formatNumber).join(':')
 
   return `${t1} ${t2}`
+}
+
+export function littleTime (date) {
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+
+  const t1 = [year, month, day].map(formatNumber).join('-')
+
+  return `${t1}`
+}
+
+function RndNum(n){
+    var rnd="";
+    for(var i=0;i<n;i++)
+        rnd+=Math.floor(Math.random()*10);
+    return rnd;
 }
 
 export function LeftMenuFun(array) {
@@ -30,7 +47,6 @@ export function LeftMenuFun(array) {
     }
     return temp
 }
-
 
 export function bezier(pots, amount) {
     var pot;
@@ -79,6 +95,8 @@ export function bezier(pots, amount) {
 export default {
   formatNumber,
   formatTime,
+  littleTime,
   LeftMenuFun,
-  bezier
+  bezier,
+  RndNum
 }

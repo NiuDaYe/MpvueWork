@@ -655,7 +655,7 @@ export default{
                 }
             })
         },
-        // 点击查找可用物品 -- > 改成跳转到获取到的商品动画
+        // 点击查找可用物品
         clickFindDcMaterialInfo(e){
             let _this = this;
             this.selectIndex = e.currentTarget.id;
@@ -687,11 +687,13 @@ export default{
             var arr = [];
     		list.map((res)=>{
     			res.materialList.map((item,index)=>{
-    				if(item.materialName == this.searchName){
+                    if(item.materialName.indexOf(this.searchName) != -1 ){
     					arr.push(item)
     				}
     			})
     		})
+            if(this.searchName == "") arr = [];
+
             if(arr.length > 0){
                 this.screening = arr;
                 this.searchResult = true;
@@ -699,14 +701,6 @@ export default{
                 this.searchResult = false;
             }
         },
-        showMsgFromChild(data){
-            this.searchName = data;
-            if(this.searchName != ""){
-                this.searchResult = true;
-            }else{
-                this.searchResult = false;
-            }
-        }
     },
     watch:{
         dcList:{

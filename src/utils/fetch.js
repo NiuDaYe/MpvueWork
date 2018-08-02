@@ -6,9 +6,6 @@ let fly=new Fly
 fly.config.baseURL = "https://ecsc.meishijia.com/ecsc-mobile-rpc";  //测试环境
 // fly.config.baseURL = "https://ecsc.e7e6.net/ecsc-mobile-rpc"; //正式环境
 
-// http://test.e7e6.net
-
-
 fly.config.timeout=5000;
 
 //添加请求拦截器

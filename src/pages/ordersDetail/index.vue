@@ -90,10 +90,10 @@ export default{
             visibleCannot:false,            // 取消订单弹窗
             isReceiv:true,                  // 是否收货
             actionsPay: [
-                {
-                    name: '微信',
-                    color: '#2d8cf0'
-                },
+                // {
+                //     name: '微信',
+                //     color: '#2d8cf0'
+                // },
                 {
                     name: '余额',
                     color: '#19be6b'
@@ -158,7 +158,8 @@ export default{
         showPayList(e){
             const index = e.mp.detail.index;
             if (index === 0) {
-                console.log('调微信支付');
+                //console.log('调微信支付');
+                this.balancePay();
             }else if(index === 1){
                 console.log('调余额支付');
                 this.balancePay();
@@ -216,7 +217,7 @@ export default{
                  "userName": userInfo.userName,
                  "userCode": userInfo.userCode,
                  "data":[{
-                           "id": detailMessage.id,
+                    "id": detailMessage.id,
                  }]
             }
 
@@ -255,7 +256,7 @@ export default{
     computed: {
         contentHeight(){
             if (this.winHeight) {
-                return this.winHeight - 150 + 'px'
+                return this.winHeight - 130 + 'px'
             }
         },
         totalPrice(){

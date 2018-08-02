@@ -16,8 +16,8 @@
                   <picker mode="date" :value="date" @change="bindDateChange">
                     <view class="picker">{{date}}</view>
                   </picker>
+                  <i-icon class="enter" type="enter" size="16"/>
                 </view>
-                <i-icon class="enter" type="enter" size="16"/>
             </div>
         </div>
         <scroll-view scroll-y class="cell-list-border" @scrolltolower="lower" :style="'height:'+contentHeight">
@@ -49,8 +49,8 @@
 
 <script>
 import wxp from 'minapp-api-promise'
-import fetch from '@/utils/fetch'
-import Vue from 'vue';
+import publicaa from '@/utils/public'
+import md5 from 'js-md5'
 const { $Message } = require('../../../static/examples/base/index');
 import { submitOrder,loginCredentialsCheck,balancePayment } from '@/api/request'
 
@@ -60,7 +60,8 @@ export default{
             winHeight:null,
             height:144,
             selectFoods:null,
-            date: '2000-09-01',
+            date: '2000-09-01',             // 期望到货日期
+            dates: '2000-09-01 12:00:00',   // 提交微信支付
             information:{
                 address:'',
                 linkman:'',
@@ -68,10 +69,10 @@ export default{
             },
             visiblePay:false,               // 支付列表
             actionsPay: [
-                // {
-                //     name: '微信',
-                //     color: '#2d8cf0'
-                // },
+                {
+                    name: '微信',
+                    color: '#2d8cf0'
+                },
                 {
                     name: '余额',
                     color: '#19be6b'
@@ -90,7 +91,6 @@ export default{
         let myDate = new Date();
         let userInfo = wx.getStorageSync('userInfo');
         let selectFoods = wx.getStorageSync('selectFoods');
-
         await wxp.setNavigationBarTitle({
           title: '核对订单'
         })
@@ -102,8 +102,8 @@ export default{
         })
         this.selectFoods = selectFoods;
         this.winHeight = info.windowHeight;
-        this.date = myDate.getFullYear() + "-" + myDate.getMonth() + "-" + myDate.getDate();
-
+        this.dates = publicaa.formatTime(myDate);
+        this.date = publicaa.littleTime(myDate)
         this.information.address = userInfo.address;
         this.information.linkman = userInfo.linkman;
         this.information.phone = userInfo.phone;
@@ -115,8 +115,7 @@ export default{
         showPayList(e){
             const index = e.mp.detail.index;
             if (index === 0) {
-                // this.wxPay();
-                this.balancePay();
+                this.wxPay();
             }else if(index === 1){
                 this.balancePay();
             }
@@ -140,7 +139,7 @@ export default{
                         "clearingType":selectFoods[0].clearingType,
                         "address":this.information.address,
                         "phone":this.information.phone,
-                        "hopeDate":this.date + " " + "00:00:00",
+                        "hopeDate":this.dates,
                         "entryId":userInfo.userId,
                         "entryCode":userInfo.userCode,
                         "entryName":userInfo.userName,
@@ -260,37 +259,72 @@ export default{
             let _this = this;
             let userInfo = wx.getStorageSync('userInfo');
             let selectFoods = wx.getStorageSync('selectFoods');
+            var timestamp = new Date().getTime().toString();
+            let noncestr = publicaa.RndNum(32);
+            let selectFoodsName = [];
+            selectFoods.map(res=>{
+                selectFoodsName.push(res.materialName);
+            })
             let data = {
             	"code": 0,
             	"data": [{
-            		"subject": "**用户购买**商品",
+                    "subject": userInfo.userName + "用户购买了" + selectFoodsName,
             		"order_no": this.prepay_id.billNo,
+            		"bill_num": this.prepay_id.billNo,
             		"pay_type": "wechat_pay",
+            		"pos_num": "WEB",
+            		"opt_num": "小程序点餐",
             		"amount": this.prepay_id.paymentAmt,
+            		"total_amount": this.prepay_id.paymentAmt,
+            		"currency": "CNY",
             		"client_ip": "127.0.0.1",
-            		"body": "这个商品真的不错哦",
+            		"body": "小程序点餐订单支付",
             		"service_type": "dhb08",
-            		"report_date": "2018-07-16",
+            		"channel": "",
+            		"report_date": this.dates,
             		"extra": {
             			"all_pay": {
-                            "openid": _this.OPENID.openid,
+            				"notify_url": "null/notify/tzxstar",
             				"trade_type": "JSAPI",
+            				"openid": this.OPENID.openid,
+                            // "openid":"ooG07uE9fLtEcoU58gqJwW5AUQCc",
+            				"trade_source": "XCX"
             			}
             		}
             	}],
-            	// "store_id": selectFoods[0].dcId,    //线上用这个测试中心ID
-                "store_id": 0,
-            	"success": false,
+            	"source": "SERVER",
+                //"store_id": selectFoods[0].dcId,    //线上用这个测试中心ID
+            	"store_id": 0,
             	"tenancy_id": userInfo.tenancyId,
             	"type": "GET_PREPAY_BARCODE"
             }
-
             wx.request({
-                 url: 'https://test.e7e6.net/payment/news/post',
+                url: 'https://test.e7e6.net/payment/news/post',
                 data:data,
                 method:'POST',
                 success:function(res){
-                    console.log(res);
+                    let prepayid = res.data.data[0].prepay_id;
+                    let stringA="appId=wx059d9caa6935d61a&nonceStr=" + noncestr +"&package=prepay_id=" + prepayid +"&signType=MD5&timeStamp=" + timestamp;
+                    let stringSignTemp=stringA+"&key=tzxsaasweixinpay2015101212150000";                     //注：key为商户平台设置的密钥key
+                    let sign=md5(stringSignTemp).toUpperCase();                                             //注：MD5签名方式
+
+                    wx.requestPayment({
+                        'timeStamp': timestamp,
+                        'nonceStr': noncestr,
+                        'package': 'prepay_id=' + prepayid,
+                        'signType': 'MD5',
+                        'paySign': sign,
+                        'success':function(res){
+                            console.log(res)
+                        },
+                        'fail':function(res){
+                            console.log('接口调用失败的回调函数')
+                        },
+                        'complete':function(res){
+                            console.log('接口调用结束的回调函数（调用成功、失败都会执行）')
+                        }
+                    })
+
                 }
             })
 
@@ -355,13 +389,17 @@ export default{
         padding-bottom: 20rpx;
         border-bottom: 8rpx solid #f0f5f8;
         background: #fff;
+        justify-content: space-between;
         span:nth-child(1){
             padding-left: 56rpx;
         }
         .section{
-            padding-left: 300rpx;
+            display: flex;
+            margin-right: 22px;
+            .enter{
+                margin-left: 10px;
+            }
         }
-
     }
 
     .detailsList{

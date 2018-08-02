@@ -19,7 +19,7 @@
                     </i-grid-item>
                 </a>
             </i-grid>
-            <i-grid class="pubColor">
+            <!-- <i-grid class="pubColor">
                 <i-grid-item>
                     <i-grid-icon>
                         <i-icon size="30" type="tasklist_fill" />
@@ -32,7 +32,7 @@
                     </i-grid-icon>
                     <i-grid-label>报表</i-grid-label>
                 </i-grid-item>
-            </i-grid>
+            </i-grid> -->
         </div>
 
         <i-button @click="handleOpen" class="pubColor">退出</i-button>
@@ -46,35 +46,12 @@
 <script>
 import fetch from '@/utils/fetch'
 import wxp from 'minapp-api-promise'
-import { login } from '@/api/request'
-
-
 export default {
   data () {
     return {
       winHeight:null,
       visibles:false
     }
-  },
-  mounted(){
-      // let data = {
-      //     "data":[
-      //         {
-      //             "tenancyId":"maidanglao",
-      //             "userName": "lichangwei",
-      //             "password": "e10adc3949ba59abbe56e057f20f883e"
-      //         }
-      //     ],
-      //     "pagination":null,
-      //     "store_id":"",
-      //     "tenancy_id":"maidanglao"
-      // }
-      // data = JSON.stringify(data);
-      // login(data).then( res =>{
-      //     if(res.errcode == 0){
-      //         wx.setStorageSync('userInfo',res.data[0]);
-      //     }
-      // })
   },
   methods: {
       handleOpen(){
