@@ -232,6 +232,7 @@ export default{
                 this.cancelOrder(this.thisId);
             }
         },
+        // 去支付
         topay(id){
             this.visiblePay = true;
             this.thisId = id;
